@@ -2,6 +2,7 @@ const INPUT_FILE: &str = include_str!("../../inputs/day01.txt");
 
 fn input_to_numbers(input: String) -> Vec<usize> {
     input
+        .trim()
         .split('\n')
         .map(|i| i.parse::<usize>().expect("parsing"))
         .collect()
