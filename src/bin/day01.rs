@@ -1,7 +1,10 @@
 const INPUT_FILE: &str = include_str!("../../inputs/day01.txt");
 
 fn part_1(file: String) -> usize {
-  calculate_depth_measurement(input_to_numbers(file))
+  input_to_numbers(file)
+    .windows(2)
+    .filter(|values| values[0] < values[1])
+    .count()
 }
 
 fn part_2(file: String) -> usize {
