@@ -1,17 +1,23 @@
-# adventOfCode2021
+# 🎄Advent Of Code 2021🎄
 
-Advent Of Code 2021 - With Rust
+My [Advent Of Code 2021](https://adventofcode.com/2021) solutions
 
-## Solutions
+Agenda is to learn [Rust](https://www.rust-lang.org/)
 
-Run the specific day solution by executing command
+## Working with the solutions
+
+Run a specific day solution by executing command
 
 ```bash
 $ cargo run --bin dayXX
 ```
 
-and run the unit tests with
+and run the unit tests for that specific day
 
 ```bash
 $ cargo test --bin dayXX
 ```
+
+## Status
+
+- Day 1 ⭐⭐
