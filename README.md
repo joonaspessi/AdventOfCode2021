@@ -1,10 +1,10 @@
-# 🎄Advent Of Code 2021🎄
+# Advent Of Code 2021
 
 My [Advent Of Code 2021](https://adventofcode.com/2021) solutions
 
 Agenda is to learn [Rust](https://www.rust-lang.org/)
 
-## Working with the solutions
+## Working with the code
 
 Run a specific day solution by executing command
 
