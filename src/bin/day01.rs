@@ -1,5 +1,12 @@
 const INPUT_FILE: &str = include_str!("../../inputs/day01.txt");
 
+fn input_to_numbers(input: String) -> Vec<usize> {
+  input
+    .split('\n')
+    .map(|i| i.parse::<usize>().expect("parsing"))
+    .collect()
+}
+
 fn part_1(file: String) -> usize {
   input_to_numbers(file)
     .windows(2)
@@ -15,13 +22,6 @@ fn part_2(file: String) -> usize {
     .windows(2)
     .filter(|values| values[0] < values[1])
     .count()
-}
-
-fn input_to_numbers(input: String) -> Vec<usize> {
-  input
-    .split('\n')
-    .map(|i| i.parse::<usize>().expect("parsing"))
-    .collect()
 }
 
 fn main() {
