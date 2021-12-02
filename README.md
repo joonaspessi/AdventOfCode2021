@@ -24,7 +24,7 @@ $ cargo test --bin dayXX
 
 - Simple window looping.
 - First iteration was not the most elegant one. Included for loops and manual indexing to previous items
-- Watched some youtube videos and learned that there is `windows` method in rust iterator that can window iterable items. These produced very elegant solution.
+- Watched some youtube videos and learned that there is `windows` method in rust iterator that can window iterable items. This produced very elegant functional solution.
 
 ### Day 2 ⭐⭐
 
