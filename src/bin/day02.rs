@@ -71,7 +71,7 @@ mod test {
     use super::*;
 
     #[test]
-    fn test_solves_part1() {
+    fn test_solves_part1_example() {
         assert_eq!(
             part_1(String::from(
                 "forward 5\ndown 5\nforward 8\nup 3\ndown 8\nforward 2"
@@ -81,12 +81,22 @@ mod test {
     }
 
     #[test]
-    fn test_solves_part2() {
+    fn test_solves_part1_input() {
+        assert_eq!(part_1(String::from(INPUT_FILE)), 1714680);
+    }
+
+    #[test]
+    fn test_solves_part2_example() {
         assert_eq!(
             part_2(String::from(
                 "forward 5\ndown 5\nforward 8\nup 3\ndown 8\nforward 2"
             )),
             900
         );
+    }
+
+    #[test]
+    fn test_solves_part2_input() {
+        assert_eq!(part_2(String::from(INPUT_FILE)), 1963088820);
     }
 }
