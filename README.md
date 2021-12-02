@@ -20,6 +20,15 @@ $ cargo test --bin dayXX
 
 ## Status (⭐ 4/50)
 
-Day 1 ⭐⭐
+### Day 1 ⭐⭐
 
-Day 2 ⭐⭐
+- Simple window looping.
+- First iteration was not the most elegant one. Included for loops and manual indexing to previous items
+- Watched some youtube videos and learned that there is `windows` method in rust iterator that can window iterable items. These produced very elegant solution.
+
+### Day 2 ⭐⭐
+
+- Simple command parsing and cumulating the result.
+- Using Rust Enum values and pattern matching to form the results.
+- Started using rust-analyzer language server in VSCode for improved inline typehints `"rust-analyzer.inlayHints.enable": true1963088820`. Seems to give nice help for understanding the type system and infered types.
+- Currently the fluency in code writing is really bad. I have ansi keyboard, vscode in vim-mode and Rust as a programming language. All of these things are new to me.
