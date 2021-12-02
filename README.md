@@ -18,6 +18,8 @@ and run the unit tests for that specific day
 $ cargo test --bin dayXX
 ```
 
-## Status
+## Status (⭐ 4/50)
 
-- Day 1 ⭐⭐
+Day 1 ⭐⭐
+
+Day 2 ⭐⭐
