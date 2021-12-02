@@ -31,7 +31,6 @@ fn part_1(file: String) -> usize {
     let mut position: usize = 0;
     let mut depth: usize = 0;
     for command in parse(file).iter() {
-        println!("{:?}", command);
         match command {
             Command::FORWARD(amount) => position += amount,
             Command::DOWN(amount) => depth += amount,
@@ -46,7 +45,6 @@ fn part_2(file: String) -> usize {
     let mut depth: usize = 0;
     let mut aim: usize = 0;
     for command in parse(file).iter() {
-        println!("{:?}", command);
         match command {
             Command::FORWARD(amount) => {
                 position += amount;
