@@ -1,5 +1,7 @@
 # Advent Of Code 2021
 
+![build status](https://github.com/joonaspessi/AdventOfCode2021/actions/workflows/rust.yml/badge.svg)
+
 My [Advent Of Code 2021](https://adventofcode.com/2021) solutions
 
 Agenda is to learn [Rust](https://www.rust-lang.org/)
