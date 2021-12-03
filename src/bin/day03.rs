@@ -11,7 +11,7 @@ fn parse(input: String) -> Vec<Vec<u32>> {
         .collect()
 }
 
-fn pivot(data: Vec<Vec<u32>>) -> Vec<Vec<u32>> {
+fn pivot_table(data: Vec<Vec<u32>>) -> Vec<Vec<u32>> {
     let mut result: Vec<Vec<u32>> = vec![vec![0; data.len()]; data[0].len()];
     for i in 0..data[0].len() {
         for j in 0..data.len() {
@@ -56,7 +56,7 @@ fn calculate_rating(mut data: Vec<Vec<u32>>, compare_bit: u32) -> u32 {
 }
 
 fn part_1(file: String) -> usize {
-    let data = pivot(parse(file));
+    let data = pivot_table(parse(file));
     let mut gamma = Vec::new();
     let mut epsilon = Vec::new();
     for line in data {
