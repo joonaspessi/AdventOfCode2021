@@ -41,7 +41,7 @@ fn calculate_rating(mut data: Vec<Vec<u32>>, compare_bit: u32) -> u32 {
         data = data
             .into_iter()
             .filter(|i| {
-                if ones > zeros || ones == zeros {
+                if ones >= zeros {
                     i[index] == compare_bit
                 } else {
                     i[index] != compare_bit
@@ -71,9 +71,9 @@ fn part_1(file: String) -> usize {
             epsilon.push("1");
         }
     }
-    let gamma_int = isize::from_str_radix(&gamma.join(""), 2).unwrap();
-    let epsilon_int = isize::from_str_radix(&epsilon.join(""), 2).unwrap();
-    ((gamma_int * epsilon_int) as usize).try_into().unwrap()
+    let gamma_int = usize::from_str_radix(&gamma.join(""), 2).unwrap();
+    let epsilon_int = usize::from_str_radix(&epsilon.join(""), 2).unwrap();
+    gamma_int * epsilon_int
 }
 
 fn part_2(file: String) -> u32 {
