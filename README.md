@@ -35,7 +35,7 @@ $ cargo test --bin dayXX
 - Started using rust-analyzer language server in VSCode for improved inline typehints `"rust-analyzer.inlayHints.enable": true1963088820`. Seems to give nice help for understanding the type system and infered types.
 - Currently the fluency in code writing is really bad. I have ansi keyboard, vscode in vim-mode and Rust as a programming language. All of these things are new to me.
 
-## Day 3 ⭐⭐
+### Day 3 ⭐⭐
 
 - First part was straight forward. Basically pivoting table and then doing neccessary calculations. Most of the pain struggle was understanding how to use Rust and parse data to correct format. For example understanding the difference with String, &str and char made no sense to me at the beginning.
 - Struggled to implement the second part a little. First thought that recursive algorithm would fit here nicely but ended up fighting with Rust loaning concept. Finally while loop did the trick and got the challenge solved.
