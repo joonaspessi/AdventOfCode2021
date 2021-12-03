@@ -1,19 +1,51 @@
-const INPUT_FILE: &str = include_str!("../../inputs/day02.txt");
+use std::convert::TryInto;
 
-fn parse(input: String) -> Vec<usize> {
-    input
+const INPUT_FILE: &str = include_str!("../../inputs/day03.txt");
+
+fn parse(input: String) -> Vec<Vec<char>> {
+    let parsed: Vec<Vec<char>> = input
         .trim()
         .split('\n')
-        .map(|i| i.parse::<usize>().unwrap())
-        .collect()
+        //.map(|i| String::from(i))
+        .map(|i| i.trim().chars().collect())
+        .collect();
+
+    pivot(parsed)
+}
+
+fn pivot(data: Vec<Vec<char>>) -> Vec<Vec<char>> {
+    let mut result: Vec<Vec<char>> = vec![vec!['0'; data.len()]; data[0].len()];
+    for i in 0..data[0].len() {
+        for j in 0..data.len() {
+            result[i][j] = data[j][i];
+        }
+    }
+    result
 }
 
 fn part_1(file: String) -> usize {
-    parse(file).iter().count()
+    let data = parse(file);
+    let mut gamma = Vec::new();
+    let mut epsilon = Vec::new();
+    for line in data {
+        let zeros = line.iter().filter(|&n| *n == '0').count();
+        let ones = line.iter().filter(|&n| *n == '1').count();
+
+        if ones > zeros {
+            gamma.push("1");
+            epsilon.push("0");
+        } else {
+            gamma.push("0");
+            epsilon.push("1");
+        }
+    }
+    let gamma_int = isize::from_str_radix(&gamma.join(""), 2).unwrap();
+    let epsilon_int = isize::from_str_radix(&epsilon.join(""), 2).unwrap();
+    ((gamma_int * epsilon_int) as usize).try_into().unwrap()
 }
 
 fn part_2(file: String) -> usize {
-    parse(file).iter().count()
+    0
 }
 
 fn main() {
@@ -29,7 +61,7 @@ mod test {
 
     #[test]
     fn test_solves_part1_example() {
-        assert_eq!(part_1(String::from("1\n2\n3\n4\n5")), 5);
+        assert_eq!(part_1(String::from("00100\n11110\n10110\n10111\n10101\n01111\n00111\n11100\n10000\n11001\n00010\n01010")), 198);
     }
 
     // #[test]
