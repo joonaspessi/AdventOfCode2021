@@ -1,20 +1,19 @@
 use std::convert::TryInto;
+use std::iter::FromIterator;
 
 const INPUT_FILE: &str = include_str!("../../inputs/day03.txt");
 
-fn parse(input: String) -> Vec<Vec<char>> {
-    let parsed: Vec<Vec<char>> = input
+fn parse(input: String) -> Vec<Vec<u32>> {
+    input
         .trim()
-        .split('\n')
+        .lines()
         //.map(|i| String::from(i))
-        .map(|i| i.trim().chars().collect())
-        .collect();
-
-    pivot(parsed)
+        .map(|i| i.chars().map(|i| i.to_digit(2).unwrap()).collect())
+        .collect()
 }
 
-fn pivot(data: Vec<Vec<char>>) -> Vec<Vec<char>> {
-    let mut result: Vec<Vec<char>> = vec![vec!['0'; data.len()]; data[0].len()];
+fn pivot(data: Vec<Vec<u32>>) -> Vec<Vec<u32>> {
+    let mut result: Vec<Vec<u32>> = vec![vec![0; data.len()]; data[0].len()];
     for i in 0..data[0].len() {
         for j in 0..data.len() {
             result[i][j] = data[j][i];
@@ -24,12 +23,12 @@ fn pivot(data: Vec<Vec<char>>) -> Vec<Vec<char>> {
 }
 
 fn part_1(file: String) -> usize {
-    let data = parse(file);
+    let data = pivot(parse(file));
     let mut gamma = Vec::new();
     let mut epsilon = Vec::new();
     for line in data {
-        let zeros = line.iter().filter(|&n| *n == '0').count();
-        let ones = line.iter().filter(|&n| *n == '1').count();
+        let zeros = line.iter().filter(|&n| *n == 0).count();
+        let ones = line.iter().filter(|&n| *n == 1).count();
 
         if ones > zeros {
             gamma.push("1");
@@ -45,6 +44,8 @@ fn part_1(file: String) -> usize {
 }
 
 fn part_2(file: String) -> usize {
+    let data = parse(file);
+
     0
 }
 
