@@ -2,9 +2,9 @@ const INPUT_FILE: &str = include_str!("../../inputs/day02.txt");
 
 #[derive(Debug)]
 enum Command {
-    FORWARD(usize),
-    DOWN(usize),
-    UP(usize),
+    Forward(usize),
+    Down(usize),
+    Up(usize),
 }
 
 fn parse(input: String) -> Vec<Command> {
@@ -18,9 +18,9 @@ fn parse(input: String) -> Vec<Command> {
             let command = i[0];
             let amount: usize = i[1].parse().unwrap();
             match command {
-                "forward" => Command::FORWARD(amount),
-                "down" => Command::DOWN(amount),
-                "up" => Command::UP(amount),
+                "forward" => Command::Forward(amount),
+                "down" => Command::Down(amount),
+                "up" => Command::Up(amount),
                 _ => panic!("Cannot parse command"),
             }
         })
@@ -32,9 +32,9 @@ fn part_1(file: String) -> usize {
     let mut depth: usize = 0;
     for command in parse(file).iter() {
         match command {
-            Command::FORWARD(amount) => position += amount,
-            Command::DOWN(amount) => depth += amount,
-            Command::UP(amount) => depth -= amount,
+            Command::Forward(amount) => position += amount,
+            Command::Down(amount) => depth += amount,
+            Command::Up(amount) => depth -= amount,
         }
     }
     position * depth
@@ -46,12 +46,12 @@ fn part_2(file: String) -> usize {
     let mut aim: usize = 0;
     for command in parse(file).iter() {
         match command {
-            Command::FORWARD(amount) => {
+            Command::Forward(amount) => {
                 position += amount;
                 depth += aim * amount
             }
-            Command::DOWN(amount) => aim += amount,
-            Command::UP(amount) => aim -= amount,
+            Command::Down(amount) => aim += amount,
+            Command::Up(amount) => aim -= amount,
         }
     }
     position * depth

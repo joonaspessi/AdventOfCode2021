@@ -10,6 +10,7 @@ fn parse(input: String) -> Vec<Vec<u32>> {
 
 fn pivot_table(data: Vec<Vec<u32>>) -> Vec<Vec<u32>> {
     let mut result: Vec<Vec<u32>> = vec![vec![0; data.len()]; data[0].len()];
+
     for i in 0..data[0].len() {
         for j in 0..data.len() {
             result[i][j] = data[j][i];
@@ -18,7 +19,7 @@ fn pivot_table(data: Vec<Vec<u32>>) -> Vec<Vec<u32>> {
     result
 }
 
-fn vec_to_decimal(v: &Vec<u32>) -> u32 {
+fn vec_to_decimal(v: &[u32]) -> u32 {
     u32::from_str_radix(
         v.iter()
             .map(|i| char::from_digit(*i, 2).unwrap())
@@ -78,7 +79,7 @@ fn part_1(file: String) -> usize {
 fn part_2(file: String) -> u32 {
     let data = parse(file);
     let oxygen_generator_rating = calculate_rating(data.clone(), 1);
-    let co2_scrubbler_rating = calculate_rating(data.clone(), 0);
+    let co2_scrubbler_rating = calculate_rating(data, 0);
 
     oxygen_generator_rating * co2_scrubbler_rating
 }
