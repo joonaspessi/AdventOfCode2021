@@ -33,8 +33,7 @@ fn vec_to_decimal(v: &Vec<u32>) -> u32 {
 }
 
 fn calculate_rating(mut data: Vec<Vec<u32>>, compare_bit: u32) -> u32 {
-    let mut index = 0;
-    while data.len() > 1 {
+    for index in 0..data.len() {
         let ones: u32 = data.iter().map(|i| i[index]).sum();
         let zeros: u32 = data.len() as u32 - ones;
 
@@ -49,7 +48,9 @@ fn calculate_rating(mut data: Vec<Vec<u32>>, compare_bit: u32) -> u32 {
             })
             .collect();
 
-        index += 1;
+        if data.len() == 1 {
+            break;
+        }
     }
 
     vec_to_decimal(&data[0])
