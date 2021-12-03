@@ -1,12 +1,9 @@
-use std::convert::TryInto;
-
 const INPUT_FILE: &str = include_str!("../../inputs/day03.txt");
 
 fn parse(input: String) -> Vec<Vec<u32>> {
     input
         .trim()
         .lines()
-        //.map(|i| String::from(i))
         .map(|i| i.chars().map(|i| i.to_digit(2).unwrap()).collect())
         .collect()
 }
@@ -74,6 +71,7 @@ fn part_1(file: String) -> usize {
     }
     let gamma_int = usize::from_str_radix(&gamma.join(""), 2).unwrap();
     let epsilon_int = usize::from_str_radix(&epsilon.join(""), 2).unwrap();
+
     gamma_int * epsilon_int
 }
 
