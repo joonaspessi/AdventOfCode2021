@@ -1,3 +1,6 @@
+use std::collections::HashMap;
+use std::collections::HashSet;
+
 const INPUT_FILE: &str = include_str!("../../inputs/day04.txt");
 #[derive(Debug)]
 enum BingoCell {
@@ -160,6 +163,61 @@ fn part_2(file: String) -> u32 {
     *tables.last().unwrap()
 }
 
+fn part_1_second_try(file: String) -> u32 {
+    //let bingo_numbers = Vec::new();
+    let mut input_lines = file.split("\n\n");
+
+    let numbers: Vec<u32> = input_lines
+        .next()
+        .unwrap()
+        .split(",")
+        .map(|i| i.parse().unwrap())
+        .collect();
+
+    let mut boards = Vec::new();
+    input_lines.for_each(|raw| {
+        let mut board = HashMap::new();
+        for (y, line) in raw.lines().enumerate() {
+            for (x, value) in line.split_whitespace().enumerate() {
+                let val: u32 = value.parse().unwrap();
+                board.insert(val, (x, y));
+            }
+        }
+        boards.push(board);
+    });
+
+    let mut played_numbers = HashSet::new();
+
+    for number in numbers {
+        played_numbers.insert(number);
+
+        for board in boards.iter() {
+            if let Some((last_x, last_y)) = board.get(&number) {
+                let drawn_coordinates = played_numbers.iter().flat_map(|num| board.get(num));
+                println!("{:?}", drawn_coordinates);
+
+                let is_winner = drawn_coordinates
+                    .clone()
+                    .filter(|(x, _y)| x == last_x)
+                    .count()
+                    == 5
+                    || drawn_coordinates.filter(|(_x, y)| y == last_y).count() == 5;
+
+                if is_winner {
+                    let board_sum: u32 = board
+                        .keys()
+                        .filter(|number| !played_numbers.contains(number))
+                        .sum::<u32>()
+                        * number;
+                    return board_sum;
+                }
+            }
+        }
+    }
+
+    0
+}
+
 fn main() {
     let result_1 = part_1(String::from(INPUT_FILE));
     println!("part1: {}", result_1);
@@ -236,5 +294,37 @@ mod test {
     #[test]
     fn test_solves_part_2_input() {
         assert_eq!(part_2(String::from(INPUT_FILE)), 23541);
+    }
+    #[test]
+    fn test_solves_part_1_second_try_example() {
+        assert_eq!(
+            part_1_second_try(String::from(
+                "7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1
+
+22 13 17 11  0
+8  2 23  4 24
+21  9 14 16  7
+6 10  3 18  5
+1 12 20 15 19
+
+3 15  0  2 22
+9 18 13 17  5
+19  8  7 25 23
+20 11 10 24  4
+14 21 16 12  6
+
+14 21 17 24  4
+10 16 15  9 19
+18  8 23 26 20
+22 11 13  6  5
+2  0 12  3  7"
+            )),
+            4512
+        );
+    }
+
+    #[test]
+    fn test_solves_part_1_second_try_input() {
+        assert_eq!(part_1_second_try(String::from(INPUT_FILE)), 63424);
     }
 }
