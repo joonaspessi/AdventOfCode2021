@@ -1,21 +1,84 @@
 const INPUT_FILE: &str = include_str!("../../inputs/day04.txt");
+#[derive(Debug)]
+enum BingoCell {
+    Checked(u32),
+    UnChecked(u32),
+}
+#[derive(Debug)]
+struct BingoBoard {
+    board: Vec<Vec<BingoCell>>,
+    board_size: usize,
+}
 
-fn parse_bingo_table(input: String) -> Vec<Vec<u32>> {
-    input
-        .trim()
-        .lines()
-        .map(|line| line.trim().split_whitespace().collect::<Vec<&str>>())
-        .for_each(|i| println!("{:?}", i));
-    input
+impl BingoBoard {
+    fn play_number(&mut self, number: u32) {
+        for i in 0..self.board.len() {
+            for j in 0..self.board[i].len() {
+                if let BingoCell::UnChecked(value) = self.board[i][j] {
+                    if value == number {
+                        self.board[i][j] = BingoCell::Checked(value)
+                    }
+                }
+            }
+        }
+    }
+    fn check_win(&self, win_number: u32) -> Option<u32> {
+        for i in 0..self.board.len() {
+            let mut numbers = Vec::new();
+            for j in 0..self.board[i].len() {
+                if let BingoCell::Checked(value) = self.board[i][j] {
+                    numbers.push(value);
+                }
+                if numbers.len() == self.board_size {
+                    return Some(self.calculate_win_number(win_number));
+                }
+            }
+        }
+
+        for i in 0..self.board[0].len() {
+            let mut numbers = Vec::new();
+            for j in 0..self.board.len() {
+                if let BingoCell::Checked(value) = self.board[j][i] {
+                    numbers.push(value);
+                }
+                if numbers.len() == self.board_size {
+                    return Some(self.calculate_win_number(win_number));
+                }
+            }
+        }
+        None
+    }
+    fn calculate_win_number(&self, win_number: u32) -> u32 {
+        let empty_cell_values: u32 = self
+            .board
+            .iter()
+            .flatten()
+            .map(|i| {
+                if let BingoCell::UnChecked(value) = i {
+                    *value
+                } else {
+                    0
+                }
+            })
+            .sum();
+        empty_cell_values * win_number
+    }
+}
+
+fn parse_bingo_table(input: String) -> BingoBoard {
+    let board = input
         .trim()
         .lines()
         .map(|line| line.trim().split_whitespace().collect::<Vec<&str>>())
         .map(|line| {
             line.into_iter()
                 .map(|i| i.parse::<u32>().unwrap())
-                .collect::<Vec<u32>>()
+                .map(BingoCell::UnChecked)
+                .collect::<Vec<BingoCell>>()
         })
-        .collect()
+        .collect::<Vec<Vec<BingoCell>>>();
+    let board_size: usize = board.len();
+    BingoBoard { board, board_size }
 }
 
 fn parse_bingo_numbers(input: String) -> Vec<u32> {
@@ -27,7 +90,7 @@ fn parse_bingo_numbers(input: String) -> Vec<u32> {
         .collect()
 }
 
-fn parse(input: String) {
+fn parse(input: String) -> (Vec<u32>, Vec<BingoBoard>) {
     let chunks = input.split("\n\n");
 
     let mut bingo_numbers = Vec::new();
@@ -39,15 +102,26 @@ fn parse(input: String) {
             bingo_tables.push(parse_bingo_table(String::from(line)));
         }
     }
+    (bingo_numbers, bingo_tables)
 }
 
 fn part_1(file: String) -> u32 {
-    let input = parse(file);
+    let (bingo_numbers, mut bingo_tables) = parse(file);
+
+    for number in &bingo_numbers {
+        for table in &mut bingo_tables {
+            table.play_number(*number);
+            if let Some(result) = table.check_win(*number) {
+                return result;
+            }
+        }
+    }
     0
 }
 
 fn main() {
     let result_1 = part_1(String::from(INPUT_FILE));
+    println!("part1: {}", result_1)
 }
 
 #[cfg(test)]
@@ -80,5 +154,10 @@ mod test {
             )),
             4512
         );
+    }
+
+    #[test]
+    fn test_solves_part_1_input() {
+        assert_eq!(part_1(String::from(INPUT_FILE)), 63424);
     }
 }
