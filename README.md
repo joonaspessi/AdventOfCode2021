@@ -20,7 +20,7 @@ and run the unit tests for that specific day
 $ cargo test --bin dayXX
 ```
 
-## Status (⭐ 6/50)
+## Status (⭐ 8/50)
 
 ### Day 1 ⭐⭐
 
@@ -40,3 +40,10 @@ $ cargo test --bin dayXX
 - First part was straight forward. Basically pivoting table and then doing neccessary calculations. Most of the pain struggle was understanding how to use Rust and parse data to correct format. For example understanding the difference with String, &str and char made no sense to me at the beginning.
 - Struggled to implement the second part a little. First thought that recursive algorithm would fit here nicely but ended up fighting with Rust loaning concept. Finally while loop did the trick and got the challenge solved.
 - Rust is starting to be painful. Lots of problem understanding basic concepts like loaning and other stuff that is related to variable life cycle. Not completely understanding & and * usage. Ended up in a situation with iterable where filter closure had parameter &&&str and no reason why.
+
+### Day 4 ⭐⭐
+
+- Implementing Bingo game.
+- Lots of learning with use of structs and enums
+- Lots of difficulties to get the enum value and match the input to the enums
+- Second part was quite easy after doing the first part 1
