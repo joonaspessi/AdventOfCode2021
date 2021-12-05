@@ -56,6 +56,34 @@ fn calculate_straight_line_coordinate_points(p1: Point, p2: Point) -> Option<Vec
     Some(points)
 }
 
+fn calculate_diagonal_line_coordinate_points(p1: Point, p2: Point) -> Option<Vec<Point>> {
+    if p1.0 == p2.0 || p1.1 == p2.1 {
+        return None;
+    }
+    let (first_point, end_point) = if p1.0 < p2.0 { (p1, p2) } else { (p2, p1) };
+
+    let mut points: Vec<Point> = Vec::new();
+
+    let mut point = first_point.clone();
+    points.push(point.clone());
+
+    while point.0 != end_point.0 && point.1 != end_point.1 {
+        if point.0 < end_point.0 {
+            point = Point(point.0 + 1, point.1);
+        }
+
+        if point.1 < end_point.1 {
+            point = Point(point.0, point.1 + 1);
+        } else if point.1 > end_point.1 {
+            point = Point(point.0, point.1 - 1);
+        }
+
+        points.push(point.clone());
+    }
+
+    Some(points)
+}
+
 fn calculate_overlapping_points(points: HashMap<Point, i32>) -> usize {
     points.iter().filter(|(_point, &count)| count > 1).count()
 }
@@ -73,9 +101,30 @@ fn part_1(file: String) -> usize {
     calculate_overlapping_points(line_points)
 }
 
+fn part_2(file: String) -> usize {
+    let mut line_points = HashMap::new();
+
+    for (point_1, point_2) in parse(file) {
+        if let Some(points) = calculate_straight_line_coordinate_points(point_1, point_2) {
+            for point in points {
+                *line_points.entry(point).or_insert(0) += 1;
+            }
+        }
+        if let Some(points) = calculate_diagonal_line_coordinate_points(point_1, point_2) {
+            for point in points {
+                *line_points.entry(point).or_insert(0) += 1;
+            }
+        }
+    }
+    calculate_overlapping_points(line_points)
+}
+
 fn main() {
     let part1_result = part_1(String::from(INPUT_FILE));
-    println!("part_1: {}", part1_result)
+    println!("part_1: {}", part1_result);
+
+    let part2_result = part_2(String::from(INPUT_FILE));
+    println!("part_1: {}", part2_result)
 }
 
 #[cfg(test)]
@@ -104,5 +153,29 @@ mod test {
     #[test]
     fn test_solves_part_1_input() {
         assert_eq!(part_1(String::from(INPUT_FILE)), 5147);
+    }
+
+    #[test]
+    fn test_solves_part_2_example() {
+        assert_eq!(
+            part_2(String::from(
+                "0,9 -> 5,9
+8,0 -> 0,8
+9,4 -> 3,4
+2,2 -> 2,1
+7,0 -> 7,4
+6,4 -> 2,0
+0,9 -> 2,9
+3,4 -> 1,4
+0,0 -> 8,8
+5,5 -> 8,2"
+            )),
+            12
+        )
+    }
+
+    #[test]
+    fn test_solves_part2_input() {
+        assert_eq!(part_2(String::from(INPUT_FILE)), 16925);
     }
 }
