@@ -38,11 +38,11 @@ fn calculate_straight_line_coordinate_points(p1: Point, p2: Point) -> Option<Vec
     if p1.0 != p2.0 && p1.1 != p2.1 {
         return None;
     }
-    // X points
+    // Start
     let x_min = cmp::min(p1.0, p2.0);
-    let x_max = cmp::max(p1.0, p2.0);
-    // Y
     let y_min = cmp::min(p1.1, p2.1);
+    // End
+    let x_max = cmp::max(p1.0, p2.0);
     let y_max = cmp::max(p1.1, p2.1);
 
     let mut points: Vec<Point> = Vec::new();
