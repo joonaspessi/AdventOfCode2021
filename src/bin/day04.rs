@@ -224,6 +224,8 @@ fn main() {
 
     let result_2 = part_2(String::from(INPUT_FILE));
     println!("part2: {}", result_2);
+
+    part_1_second_try(String::from(INPUT_FILE));
 }
 
 #[cfg(test)]
