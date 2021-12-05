@@ -20,6 +20,13 @@ and run the unit tests for that specific day
 $ cargo test --bin dayXX
 ```
 
+For Test Driven Development, you can setup a Nodemon to run unit tests on every file change
+
+```bash
+$ npm i -g nodemon #if not installed, install nodemon with npm
+$ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
+```
+
 ## Status (⭐ 10/50)
 
 ### Day 1 ⭐⭐
