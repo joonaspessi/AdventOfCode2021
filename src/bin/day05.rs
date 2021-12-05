@@ -38,14 +38,15 @@ fn calculate_straight_line_coordinate_points(p1: Point, p2: Point) -> Option<Vec
     if p1.0 != p2.0 && p1.1 != p2.1 {
         return None;
     }
-    // Start
+
     let x_min = cmp::min(p1.0, p2.0);
     let y_min = cmp::min(p1.1, p2.1);
-    // End
+
     let x_max = cmp::max(p1.0, p2.0);
     let y_max = cmp::max(p1.1, p2.1);
 
     let mut points: Vec<Point> = Vec::new();
+
     for x in x_min..=x_max {
         for y in y_min..=y_max {
             points.push(Point(x, y));
@@ -55,18 +56,21 @@ fn calculate_straight_line_coordinate_points(p1: Point, p2: Point) -> Option<Vec
     Some(points)
 }
 
+fn calculate_overlapping_points(points: HashMap<Point, i32>) -> usize {
+    points.iter().filter(|(_point, &count)| count > 1).count()
+}
+
 fn part_1(file: String) -> usize {
-    let coord_pairs = parse(file);
     let mut lines = HashMap::new();
-    for c_pair in coord_pairs {
+
+    for c_pair in parse(file) {
         if let Some(points) = calculate_straight_line_coordinate_points(c_pair.0, c_pair.1) {
             for point in points {
                 *lines.entry(point).or_insert(0) += 1;
             }
         }
     }
-    let result: usize = lines.iter().filter(|(_point, &count)| count > 1).count();
-    result
+    calculate_overlapping_points(lines)
 }
 
 fn main() {
