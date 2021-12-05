@@ -61,16 +61,16 @@ fn calculate_overlapping_points(points: HashMap<Point, i32>) -> usize {
 }
 
 fn part_1(file: String) -> usize {
-    let mut lines = HashMap::new();
+    let mut line_points = HashMap::new();
 
-    for c_pair in parse(file) {
-        if let Some(points) = calculate_straight_line_coordinate_points(c_pair.0, c_pair.1) {
+    for (point_1, point_2) in parse(file) {
+        if let Some(points) = calculate_straight_line_coordinate_points(point_1, point_2) {
             for point in points {
-                *lines.entry(point).or_insert(0) += 1;
+                *line_points.entry(point).or_insert(0) += 1;
             }
         }
     }
-    calculate_overlapping_points(lines)
+    calculate_overlapping_points(line_points)
 }
 
 fn main() {
