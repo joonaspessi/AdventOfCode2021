@@ -4,7 +4,9 @@
 
 My [Advent Of Code 2021](https://adventofcode.com/2021) solutions
 
-Agenda is to learn [Rust](https://www.rust-lang.org/)
+- Agenda is to use and learn [Rust](https://www.rust-lang.org/)
+- I'm also learning to use VIM and especially neovim. I'm currently using setup from a blog [post](https://sharksforarms.dev/posts/neovim-rust/). Precisely the configuration is [this](https://github.com/sharksforarms/neovim-rust/blob/master/neovim-init-lsp-cmp-rust-tools.vim)
+- Not to make it too easy, I have switched my coding keyboard from nordic ISO to US ANSI layout.
 
 ## Working with the code
 
