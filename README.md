@@ -65,7 +65,7 @@ $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 
 - In part one, I used naive way to push new fishes to a vector and then counting vector length at the end.
 - Vector implementation did not scale at all for part two.
-- Changed to Hashmap based implementation where key was fish age and value count of the fish. In the end I can just iterate hasmap keys and accumulate fish count from the values.
-- Debugged a while for a problem where rust runtime panicked. Turned out that there was overflow when calculating final result for the part02. Chagned count to u64 which worked out.
+- Changed to Hashmap based implementation where key was "fish age" and value "count of the fish". Final fish count can be resolved by iterating hashmap and accumulating values.
+- Debugged a while for a problem where rust runtime panicked. Turned out that there was overflow when calculating final result for the part02. Changed count to u64 which worked out.
 - Solution was quite elegant and really simple after changing to the Hashmap based implementation.
 - Finally refactored also part01 to use Hashmap and refactored them to use common solver.
