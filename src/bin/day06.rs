@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 const INPUT_FILE: &str = include_str!("../../inputs/day06.txt");
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -39,6 +41,24 @@ fn parse(input: String) -> Vec<LanternFish> {
         .collect()
 }
 
+fn solver(input: String, days: u32) -> u64 {
+    let mut fishes = parse_2(input);
+    for _day in 1..=256 {
+        let mut new_fish_generation = HashMap::new();
+
+        for (age, count) in fishes {
+            if age == 0 {
+                *new_fish_generation.entry(8).or_insert(0) += count;
+                *new_fish_generation.entry(6).or_insert(0) += count;
+            } else {
+                *new_fish_generation.entry(age - 1).or_insert(0) += count;
+            }
+        }
+        fishes = new_fish_generation;
+    }
+
+    fishes.iter().fold(0, |sum, (_age, count)| sum + count) as u64
+}
 fn part_1(input: String) -> u32 {
     let mut fishes = parse(input);
 
@@ -71,22 +91,7 @@ fn parse_2(input: String) -> HashMap<u32, u64> {
 }
 
 fn part_2(input: String) -> u64 {
-    let mut fishes = parse_2(input);
-    for _day in 1..=256 {
-        let mut new_fish_generation = HashMap::new();
-
-        for (age, count) in fishes {
-            if age == 0 {
-                *new_fish_generation.entry(8).or_insert(0) += count;
-                *new_fish_generation.entry(6).or_insert(0) += count;
-            } else {
-                *new_fish_generation.entry(age - 1).or_insert(0) += count;
-            }
-        }
-        fishes = new_fish_generation;
-    }
-
-    fishes.iter().fold(0, |sum, (_age, count)| sum + count) as u64
+    solver(input, 256)
 }
 
 fn main() {
