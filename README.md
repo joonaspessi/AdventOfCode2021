@@ -27,7 +27,7 @@ $ npm i -g nodemon #if not installed, install nodemon with npm
 $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 ```
 
-## Status (⭐ 10/50)
+## Status (⭐ 12/50)
 
 ### Day 1 ⭐⭐
 
@@ -60,3 +60,11 @@ $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 - The trick was to parse coordinate points to a hashmaps. Hashmap where hash key is the coordinate tuple is actually quite elegant way to store grid coordinates when the size is not well known.
 - Hashmap value was holding the overlapping line count.
 - Part 02 diagonal calculation was causing little grey hair but made an simple solution, where I took first x-coordinate and then started to increment x and either increment or decrement y in a while loop until both x and y matched the endpoint.
+
+### Day 6 ⭐⭐
+
+- In part one, I used naive way to push new fishes to a vector and then counting vector length at the end.
+- Vector implementation did not scale at all for part two.
+- Changed to Hashmap based implementation where key was fish age and value count of the fish. In the end I can just iterate hasmap keys and accumulate fish count from the values.
+- Debugged a while for a problem where rust runtime panicked. Turned out that there was overflow when calculating final result for the part02. Chagned count to u64 which worked out.
+- Solution was quite elegant and really simple after changing to the Hashmap based implementation
