@@ -10,19 +10,19 @@ My [Advent Of Code 2021](https://adventofcode.com/2021) solutions
 
 ## Working with the code
 
-Run a specific day solution by executing command
+Run a day XX solution by executing command
 
 ```bash
 $ cargo run --bin dayXX
 ```
 
-and run the unit tests for that specific day
+and run the unit tests for day XX
 
 ```bash
 $ cargo test --bin dayXX
 ```
 
-For Test Driven Development, you can setup a Nodemon to run unit tests on every file change
+For Test Driven Development, you can setup a Nodemon to run unit tests on source file change
 
 ```bash
 $ npm i -g nodemon #if not installed, install nodemon with npm
@@ -59,12 +59,14 @@ $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 
 ### Day 5 ⭐⭐
 
+- Lazy Sunday at the cottage in wilderness. Plenty of time to solve the day.
 - The trick was to parse coordinate points to a hashmaps. Hashmap where hash key is the coordinate tuple is actually quite elegant way to store grid coordinates when the size is not well known.
 - Hashmap value was holding the overlapping line count.
 - Part 02 diagonal calculation was causing little grey hair but made an simple solution, where I took first x-coordinate and then started to increment x and either increment or decrement y in a while loop until both x and y matched the endpoint.
 
 ### Day 6 ⭐⭐
 
+- Independence day, lots of time to solve the day.
 - In part one, I used naive way to push new fishes to a vector and then counting vector length at the end. Similar problem last year [AoC 2020/23](https://adventofcode.com/2020/day/23)
 - Vector implementation did not scale at all for part two.
 - Changed to Hashmap based implementation where key was "fish age" and value "count of the fish". Final fish count can be resolved by iterating hashmap and accumulating values.
