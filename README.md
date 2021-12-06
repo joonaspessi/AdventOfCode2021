@@ -63,7 +63,7 @@ $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 
 ### Day 6 ⭐⭐
 
-- In part one, I used naive way to push new fishes to a vector and then counting vector length at the end.
+- In part one, I used naive way to push new fishes to a vector and then counting vector length at the end. Similar problem last year [AoC 2020/23](https://adventofcode.com/2020/day/23)
 - Vector implementation did not scale at all for part two.
 - Changed to Hashmap based implementation where key was "fish age" and value "count of the fish". Final fish count can be resolved by iterating hashmap and accumulating values.
 - Debugged a while for a problem where rust runtime panicked. Turned out that there was overflow when calculating final result for the part02. Changed count to u64 which worked out.
