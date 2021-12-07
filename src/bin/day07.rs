@@ -31,16 +31,7 @@ fn part_1(file: String) -> i32 {
 
 fn fuel_consumption(position: i32, target: i32) -> i32 {
     let distance = (target - position).abs();
-
-    if distance == 0 {
-        return 0;
-    }
-
-    let mut result = 0;
-    for i in 0..(target - position).abs() {
-        result += i + 1;
-    }
-    result
+    distance * (distance + 1) / 2
 }
 
 fn part_2(file: String) -> i32 {
