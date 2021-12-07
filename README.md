@@ -81,3 +81,4 @@ $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 - Populated hashmap keys with all crab positions just iterating through all final positions and cumulating the needed fuel
 - Struggled to find an answer to part two. Decided to do unit test to calculate fuel consumption.
 - Seems that part02 implementation is quite slow and it could be improved by adding memoization to fuel consumption calculation
+- Improved the performance by using [arithmetic progression](https://en.wikipedia.org/wiki/Arithmetic_progression)
