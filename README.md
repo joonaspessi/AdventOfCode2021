@@ -29,7 +29,7 @@ $ npm i -g nodemon #if not installed, install nodemon with npm
 $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 ```
 
-## Status (⭐ 12/50)
+## Status (⭐ 14/50)
 
 ### Day 1 ⭐⭐
 
@@ -73,3 +73,11 @@ $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 - Debugged a while for a problem where rust runtime panicked. Turned out that there was overflow when calculating final result for the part02. Changed count to u64 which worked out.
 - Solution was quite elegant and really simple after changing to the Hashmap based implementation.
 - Finally refactored also part01 and part02 to use common Hashmap based solver.
+
+### Day07 ⭐⭐
+
+- Again a day with a Hashmap data structure.
+- Created a hashmap which key contained "crab final position" and value "needed fuel"
+- Populated hashmap keys with all crab positions just iterating through all final positions and cumulating the needed fuel
+- Struggled to find an answer to part two. Decided to do unit test to calculate fuel consumption.
+- Seems that part02 implementation is quite slow and it could be improved by adding memoization to fuel consumption calculation
