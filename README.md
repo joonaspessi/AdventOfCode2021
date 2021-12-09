@@ -29,7 +29,7 @@ $ npm i -g nodemon #if not installed, install nodemon with npm
 $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 ```
 
-## Status (⭐ 15/50)
+## Status (⭐ 16/50)
 
 ### Day 1 ⭐⭐
 
@@ -83,7 +83,10 @@ $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 - Seems that part02 implementation is quite slow and it could be improved by adding memoization to fuel consumption calculation
 - Improved the performance by using [arithmetic progression](https://en.wikipedia.org/wiki/Arithmetic_progression)
 
-### Day08 ⭐❌
+### Day08 ⭐⭐
 
 - Part 1 was really simple, just counting character lengths
 - Had so painful moments with rust String, &str and char mappings that run out of time. Have to continue some other day with the part two.
+- Solving day08 problems on day09. Ugliest code I have written in long time.
+- Ended up bruteforcing the result by trying all possible permutations. It is slow and ugly but it works.
+- Lots of problems with rust and the ownership model, needs more studying
