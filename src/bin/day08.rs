@@ -4,10 +4,6 @@ use std::collections::HashSet;
 
 const INPUT_FILE: &str = include_str!("../../inputs/day08.txt");
 
-const DIGITS: [&str; 10] = [
-    "abcefg", "cf", "acdeg", "acdfg", "bcdf", "abdfg", "abdefg", "acf", "abcdefg", "abcdfg",
-];
-
 // 0: abcefg (6)
 // 1: cf (2)
 // 2: acdeg (4)
@@ -17,19 +13,6 @@ const DIGITS: [&str; 10] = [
 // 6: abdefg (6)
 // 7: acf (3)
 // 8: abcdefg (7)
-// 9: abcdfg (6)
-
-// 4: bcdf (3)
-// 1: cf (2)
-// 7: acf (3)
-// 8: abcdefg (7)
-
-// 2: acdeg (5)
-// 3: acdfg (5)
-// 5: abdfg (5)
-
-// 0: abcefg (6)
-// 6: abdefg (6)
 // 9: abcdfg (6)
 
 fn parse(file: String) -> Vec<(Vec<String>, Vec<String>)> {
@@ -51,39 +34,6 @@ fn parse(file: String) -> Vec<(Vec<String>, Vec<String>)> {
             (input_signals, output_digits)
         })
         .collect()
-}
-
-fn parse_2(file: String) -> Vec<(Vec<HashSet<char>>, Vec<String>)> {
-    file.lines()
-        .map(|line| {
-            let mut line_two_parts = line.split('|');
-            let input_signals = line_two_parts
-                .next()
-                .unwrap()
-                .split_whitespace()
-                .map(|i| i.chars().collect())
-                .collect();
-            let output_digits: Vec<String> = line_two_parts
-                .next()
-                .unwrap()
-                .split_whitespace()
-                .map(|i| i.chars().sorted().collect())
-                .collect();
-            (input_signals, output_digits)
-        })
-        .collect()
-}
-
-fn find_digits(input_signals: Vec<String>) {
-    let signal_map: HashMap<char, char> = HashMap::new();
-    let mut cf = String::new();
-    for i in &input_signals {
-        println!("{}", i);
-        if i.chars().count() == 2 {
-            cf = i.to_string();
-        }
-    }
-    println!("cf is {}", cf);
 }
 
 fn concat_number(vec: &[usize]) -> usize {
@@ -217,7 +167,22 @@ mod test {
     }
 
     #[test]
+    fn test_solves_part_2_example_2() {
+        assert_eq!(part_2(String::from(
+            "be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe\n\
+             edbfga begcd cbg gc gcadebf fbgde acbgfd abcde gfcbed gfec | fcgedb cgb dgebacf gc\n\
+             fgaebd cg bdaec gdafb agbcfd gdcbef bgcad gfac gcb cdgabef | cg cg fdcagb cbg\n\
+             fbegcd cbd adcefb dageb afcb bc aefdc ecdab fgdeca fcdbega | efabcd cedba gadfec cb\n\
+             aecbfdg fbg gf bafeg dbefa fcge gcbea fcaegb dgceab fcbdga | gecf egdcabf bgf bfgea\n\
+             fgeab ca afcebg bdacfeg cfaedg gcfdb baec bfadeg bafgc acf | gebdcfa ecba ca fadegcb\n\
+             dbcfg fgd bdegcaf fgec aegbdf ecdfab fbedc dacgb gdcebf gf | cefg dcbef fcge gbcadfe\n\
+             bdfegc cbegaf gecbf dfcage bdacg ed bedf ced adcbefg gebcd | ed bcgafe cdgba cbgef\n\
+             egadfb cdbfeg cegd fecab cgb gbdefca cg fgcdab egfdb bfceg | gbdfcae bgc cg cgb\n\
+             gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce")),61229)
+    }
+
+    #[test]
     fn test_solves_part2_input() {
-        assert_eq!(part_2(String::from(INPUT_FILE)), 310);
+        assert_eq!(part_2(String::from(INPUT_FILE)), 915941);
     }
 }
