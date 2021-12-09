@@ -1,6 +1,12 @@
+use itertools::Itertools;
 use std::collections::HashMap;
+use std::collections::HashSet;
 
 const INPUT_FILE: &str = include_str!("../../inputs/day08.txt");
+
+const DIGITS: [&str; 10] = [
+    "abcefg", "cf", "acdeg", "acdfg", "bcdf", "abdfg", "abdefg", "acf", "abcdefg", "abcdfg",
+];
 
 // 0: abcefg (6)
 // 1: cf (2)
@@ -12,7 +18,6 @@ const INPUT_FILE: &str = include_str!("../../inputs/day08.txt");
 // 7: acf (3)
 // 8: abcdefg (7)
 // 9: abcdfg (6)
-
 
 // 4: bcdf (3)
 // 1: cf (2)
@@ -27,23 +32,49 @@ const INPUT_FILE: &str = include_str!("../../inputs/day08.txt");
 // 6: abdefg (6)
 // 9: abcdfg (6)
 
-
-
 fn parse(file: String) -> Vec<(Vec<String>, Vec<String>)> {
+    file.lines()
+        .map(|line| {
+            let line_two_parts: Vec<&str> = line.split('|').map(|i| i.trim()).collect();
+            let input_signals: Vec<String> = line_two_parts
+                .first()
+                .unwrap()
+                .split_whitespace()
+                .map(String::from)
+                .collect();
+            let output_digits: Vec<String> = line_two_parts
+                .last()
+                .unwrap()
+                .split_whitespace()
+                .map(String::from)
+                .collect();
+            (input_signals, output_digits)
+        })
+        .collect()
+}
 
-
-
-    file.lines().map(|line| {
-        let line_two_parts : Vec<&str> = line.split('|').map(|i| i.trim()).collect();
-        let input_signals : Vec<String> = line_two_parts.first().unwrap().split_whitespace().map(String::from).collect();
-        let output_digits : Vec<String> = line_two_parts.last().unwrap().split_whitespace().map(String::from).collect();
-        (input_signals, output_digits)
-    }).collect()
-    
+fn parse_2(file: String) -> Vec<(Vec<HashSet<char>>, Vec<String>)> {
+    file.lines()
+        .map(|line| {
+            let mut line_two_parts = line.split('|');
+            let input_signals = line_two_parts
+                .next()
+                .unwrap()
+                .split_whitespace()
+                .map(|i| i.chars().collect())
+                .collect();
+            let output_digits: Vec<String> = line_two_parts
+                .next()
+                .unwrap()
+                .split_whitespace()
+                .map(|i| i.chars().sorted().collect())
+                .collect();
+            (input_signals, output_digits)
+        })
+        .collect()
 }
 
 fn find_digits(input_signals: Vec<String>) {
-
     let signal_map: HashMap<char, char> = HashMap::new();
     let mut cf = String::new();
     for i in &input_signals {
@@ -55,6 +86,9 @@ fn find_digits(input_signals: Vec<String>) {
     println!("cf is {}", cf);
 }
 
+fn concat_number(vec: &[usize]) -> usize {
+    vec.iter().fold(0, |acc, elem| acc * 10 + elem)
+}
 
 fn part_1(file: String) -> usize {
     let signal_patterns = parse(file);
@@ -62,17 +96,87 @@ fn part_1(file: String) -> usize {
     let mut result: usize = 0;
     for (_input_signals, output_digits) in signal_patterns {
         println!("{:?}", output_digits);
-        result += output_digits.iter().filter(|i| i.len() == 2 || i.len() == 3 ||i.len() == 4 || i.len() == 7).count();
+        result += output_digits
+            .iter()
+            .filter(|i| i.len() == 2 || i.len() == 3 || i.len() == 4 || i.len() == 7)
+            .count();
     }
     result
 }
 
 fn part_2(file: String) -> usize {
-    let signal_patterns = parse(file);
-    // TODO: Implement this
-    let mut result: usize = 5353;
-    result
+    let digits = HashSet::from([
+        "abcefg".to_string(),
+        "cf".to_string(),
+        "acdeg".to_string(),
+        "acdfg".to_string(),
+        "bcdf".to_string(),
+        "abdfg".to_string(),
+        "abdefg".to_string(),
+        "acf".to_string(),
+        "abcdefg".to_string(),
+        "abcdfg".to_string(),
+    ]);
 
+    let signals_to_numbers = vec![
+        "abcefg".to_string(),
+        "cf".to_string(),
+        "acdeg".to_string(),
+        "acdfg".to_string(),
+        "bcdf".to_string(),
+        "abdfg".to_string(),
+        "abdefg".to_string(),
+        "acf".to_string(),
+        "abcdefg".to_string(),
+        "abcdfg".to_string(),
+    ];
+    let signals = vec!['a', 'b', 'c', 'd', 'e', 'f', 'g'];
+
+    let mut result: usize = 0;
+    let signal_patterns = parse(file);
+    for sp in signal_patterns {
+        let mut mappings = HashMap::new();
+        for permutation in signals.iter().permutations(signals.len()).unique() {
+            mappings = HashMap::new();
+            for (i, sig) in signals.iter().enumerate() {
+                mappings.insert(*sig, *permutation[i]);
+            }
+
+            let mut count = 0;
+            for input_signal in &sp.0 {
+                let mapped: String = input_signal
+                    .chars()
+                    .map(|c| mappings.get(&c).unwrap())
+                    .sorted()
+                    .collect();
+
+                if digits.contains(&mapped) {
+                    count += 1;
+                }
+            }
+
+            if count == 10 {
+                break;
+            }
+        }
+
+        let mut output_number = Vec::new();
+        for output in &sp.1 {
+            let value: String = output
+                .chars()
+                .map(|c| *mappings.get(&c).unwrap())
+                .sorted()
+                .collect();
+
+            let index = signals_to_numbers.iter().position(|v| v == &value).unwrap();
+
+            output_number.push(index);
+        }
+
+        let line_result = concat_number(&output_number);
+        result += line_result;
+    }
+    result
 }
 
 fn main() {
@@ -82,7 +186,7 @@ fn main() {
     println!("part2: {}", res_2);
 }
 
-#[cfg(test)] 
+#[cfg(test)]
 mod test {
     use super::*;
 
@@ -103,12 +207,17 @@ mod test {
 
     #[test]
     fn test_solves_part1_input() {
-        assert_eq!(part_1(String::from(INPUT_FILE)),310);
+        assert_eq!(part_1(String::from(INPUT_FILE)), 310);
     }
 
     #[test]
     fn test_solves_part_2_example() {
         assert_eq!(part_2(String::from(
             "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf")), 5353)
+    }
+
+    #[test]
+    fn test_solves_part2_input() {
+        assert_eq!(part_2(String::from(INPUT_FILE)), 310);
     }
 }
