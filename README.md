@@ -29,7 +29,7 @@ $ npm i -g nodemon #if not installed, install nodemon with npm
 $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 ```
 
-## Status (⭐ 16/50)
+## Status (⭐ 17/50)
 
 ### Day 1 ⭐⭐
 
@@ -90,3 +90,8 @@ $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 - Solving day08 problems on day09. Ugliest code I have written in long time.
 - Ended up bruteforcing the result by trying all possible permutations. It is slow and ugly but it works.
 - Lots of problems with rust and the ownership model, needs more studying
+
+### Day09 ⭐
+
+- Part01 was simple 2-dimensional vector iteration with a little twist checking neighbour values
+- RUST + VIM + ANSIKEYBOARD still feels painful
