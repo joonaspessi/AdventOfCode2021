@@ -29,7 +29,7 @@ $ npm i -g nodemon #if not installed, install nodemon with npm
 $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 ```
 
-## Status (⭐ 17/50)
+## Status (⭐ 18/50)
 
 ### Day 1 ⭐⭐
 
@@ -91,7 +91,8 @@ $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 - Ended up bruteforcing the result by trying all possible permutations. It is slow and ugly but it works.
 - Lots of problems with rust and the ownership model, needs more studying
 
-### Day09 ⭐
+### Day09 ⭐⭐
 
 - Part01 was simple 2-dimensional vector iteration with a little twist checking neighbour values
 - RUST + VIM + ANSIKEYBOARD still feels painful
+- Second part was quite simple to implement with recursive algrothm. Not sure how I should include mutable parameter in recursive functions.
