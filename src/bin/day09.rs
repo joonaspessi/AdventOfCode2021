@@ -11,12 +11,12 @@ fn parse(input: String) -> Vec<Vec<u32>> {
     }).collect()
 }
 
-fn is_lava_tube(height_map : &Vec<Vec<u32>>, point: u32, x: usize, y: usize) -> bool {
+fn is_lava_tube(height_map : &[Vec<u32>], point: u32, x: usize, y: usize) -> bool {
     let up = y == 0 || (height_map[y-1][x] > point);
-    let right = x == height_map[y].len() - 1 || (height_map[y][x+1] > point ); 
+    let right = x == height_map[y].len() - 1 || (height_map[y][x+1] > point );
     let down = y == height_map.len() - 1 || (height_map[y+1][x] > point);
     let left = x == 0 ||(height_map[y][x-1] > point);
-    
+
     up && right && down && left
 }
 
@@ -31,25 +31,29 @@ fn basin_size(height_map: &[Vec<u32>], x: usize, y: usize, visited: &mut HashSet
         let mut result = 1;
         visited.insert((x,y));
 
+        //up
         if y != 0 {
             result += basin_size(height_map, x, y -1, visited);
-        } 
+        }
 
+        //right
         if x != height_map[y].len() - 1 {
             result += basin_size(height_map, x + 1, y,  visited);
-        } 
+        }
 
+        //down
         if y != height_map.len() - 1 {
             result += basin_size(height_map, x, y + 1,  visited);
-        } 
+        }
 
+        //left
         if x != 0 {
             result += basin_size(height_map, x - 1, y,  visited);
-        } 
+        }
         result
 
     }
-    
+
 }
 
 fn find_3_largest_basins(basins: Vec<u32>) -> u32 {
@@ -67,12 +71,12 @@ fn part_1(input: String) -> u32 {
     let mut low_points = Vec::new();
     for (y,row) in height_map.iter().enumerate() {
         for (x,point) in row.iter().enumerate() {
-            
+
             if is_lava_tube(&height_map, *point,  x, y) {
                 low_points.push(*point);
-            } 
+            }
 
-        } 
+        }
     }
     risk_level(low_points)
 }
@@ -83,14 +87,13 @@ fn part_2(input: String) -> u32 {
     let mut basins = Vec::new();
     for (y,row) in height_map.iter().enumerate() {
         for (x,point) in row.iter().enumerate() {
-            
-            if is_lava_tube(&height_map, *point,  x, y) {
-                let mut visited = HashSet::new();
-                basins.push(basin_size(&height_map, x, y, &mut visited));
-                
-            } 
 
-        } 
+            if is_lava_tube(&height_map, *point,  x, y) {
+                basins.push(basin_size(&height_map, x, y,&mut  HashSet::new()));
+
+            }
+
+        }
     }
     find_3_largest_basins(basins)
 }
@@ -109,10 +112,10 @@ fn main() {
 mod test {
 
     use super::*;
-    
+
     #[test]
     fn test_solves_part_1_example() {
-        
+
         assert_eq!(part_1(String::from(
            "2199943210\n\
             3987894921\n\
@@ -129,7 +132,7 @@ mod test {
 
     #[test]
     fn test_solves_part_2_example() {
-        
+
         assert_eq!(part_2(String::from(
            "2199943210\n\
             3987894921\n\
