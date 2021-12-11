@@ -29,7 +29,7 @@ $ npm i -g nodemon #if not installed, install nodemon with npm
 $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 ```
 
-## Status (⭐ 18/50)
+## Status (⭐ 20/50)
 
 ### Day 1 ⭐⭐
 
@@ -96,3 +96,9 @@ $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 - Part01 was simple 2-dimensional vector iteration with a little twist checking neighbour values
 - RUST + VIM + ANSIKEYBOARD still feels painful
 - Second part was quite simple to implement with recursive algrothm. Not sure how I should include mutable parameter in recursive functions.
+
+### Day10 ⭐⭐
+
+- Parenthesis matching. Simple problem if you know the algorithm. From last year it was easy to call the stack based [algorithm](https://www.geeksforgeeks.org/check-for-balanced-parentheses-in-an-expression/)
+- Part02 was direct continuation for part01 where you just had to to inspect the remaining stack, reverse order and add completing parenthesis.
+- little bit effort to calculate the last score.
