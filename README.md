@@ -29,7 +29,7 @@ $ npm i -g nodemon #if not installed, install nodemon with npm
 $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 ```
 
-## Status (⭐ 20/50)
+## Status (⭐ 22/50)
 
 ### Day 1 ⭐⭐
 
@@ -102,3 +102,9 @@ $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 - Parenthesis matching. Simple problem if you know the algorithm. From last year it was easy to call the stack based [algorithm](https://www.geeksforgeeks.org/check-for-balanced-parentheses-in-an-expression/)
 - Part02 was direct continuation for part01 where you just had to to inspect the remaining stack, reverse order and add completing parenthesis.
 - little bit effort to calculate the last score.
+
+### Day11 ⭐⭐
+
+- Adjacent array item indexing. Quite nice way is to just loop over -1..1 in two levels to get indexes for all adjacent cells.
+- Hashmap as a coordinate data structure is quite awesome. It helps quite a lot filter also items that were out of bounds
+- Second part was quite easy. Just checking a situation when 100 flashes in a single stage.
