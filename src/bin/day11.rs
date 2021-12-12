@@ -83,8 +83,33 @@ fn part_1(input: String) -> usize {
     result
 }
 
+fn part_2(input: String) -> usize {
+    let mut result = 0;
+    let mut energy_levels = parse(input);
+    println!("Before Any steps:");
+    print_energy_levels(&energy_levels);
+    for i in 1..=1000 {
+        incerment_energy_levels(&mut energy_levels);
+        let flash_count = flash_energy_levels(&mut energy_levels);
+        if flash_count == 100 {
+            result = i;
+            break;
+        }
+        println!("After step {}", i);
+        print_energy_levels(&energy_levels);
+        if flash_count == 100 {
+            result = i;
+            break;
+        }
+    }
+    result
+}
+
 fn main() {
     let res1 = part_1(INPUT_FILE.to_string());
+    println!("part1: {}", res1);
+    let res2 = part_2(INPUT_FILE.to_string());
+    println!("part2: {}", res2);
 }
 
 #[cfg(test)]
@@ -114,5 +139,30 @@ mod test {
     #[test]
     fn test_solves_part_1_input() {
         assert_eq!(part_1(INPUT_FILE.to_string()), 1642);
+    }
+
+    #[test]
+    fn test_solves_part_2_example() {
+        assert_eq!(
+            part_2(
+                "5483143223\n\
+                 2745854711\n\
+                 5264556173\n\
+                 6141336146\n\
+                 6357385478\n\
+                 4167524645\n\
+                 2176841721\n\
+                 6882881134\n\
+                 4846848554\n\
+                 5283751526"
+                    .to_string()
+            ),
+            195
+        );
+    }
+
+    #[test]
+    fn test_solves_part_2_input() {
+        assert_eq!(part_2(INPUT_FILE.to_string()), 320);
     }
 }
