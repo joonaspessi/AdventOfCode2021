@@ -112,5 +112,5 @@ $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 ### Day12 ⭐⭐
 
 - Without any knowledge how to solve this kind of problem, it first felt quite hard.
-- Had to Check how to solve this kind of problems. There was quite elegant solution to push the paths to a deque and count all the paths that leads to the end.
+- Had to Check (cheat) how to solve this kind of problems. There was quite elegant solution to push the paths to a deque and count all the paths that leads to the end.
 - Part two was quite simple after understanding the problem correctly. So right after the first small cave is explored twice, no other cave could not be explored two times.
