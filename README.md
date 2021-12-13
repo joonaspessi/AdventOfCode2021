@@ -29,7 +29,7 @@ $ npm i -g nodemon #if not installed, install nodemon with npm
 $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 ```
 
-## Status (⭐ 22/50)
+## Status (⭐ 24/50)
 
 ### Day 1 ⭐⭐
 
@@ -108,3 +108,9 @@ $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 - Adjacent array item indexing. Quite nice way is to just loop over -1..1 in two levels to get indexes for all adjacent cells.
 - Hashmap as a coordinate data structure is quite awesome. It helps quite a lot filter also items that were out of bounds
 - Second part was quite easy. Just checking a situation when 100 flashes in a single stage.
+
+### Day12 ⭐⭐
+
+- Without any knowledge how to solve this kind of problem, it first felt quite hard.
+- Had to Check how to solve this kind of problems. There was quite elegant solution to push the paths to a deque and count all the paths that leads to the end.
+- Part two was quite simple after understanding the problem correctly. So right after the first small cave is explored twice, no other cave could not be explored two times.
