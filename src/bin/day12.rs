@@ -57,9 +57,51 @@ fn part_1(input: String) -> usize {
     result
 }
 
+fn part_2(input: String) -> usize {
+    let cave_map = parse(input);
+
+    let mut start_position: (String, HashSet<String>, HashSet<String>) =
+        ("start".to_string(), HashSet::new(), HashSet::new());
+    start_position.1.insert("start".to_string());
+
+    let mut moves = VecDeque::from([start_position]);
+
+    let mut result = 0;
+    while !moves.is_empty() {
+        let (current, small_visited, twice_visited) = moves.pop_front().unwrap();
+
+        if current == "end" {
+            result += 1;
+        } else {
+            for next in cave_map.get(&current).unwrap() {
+                if !small_visited.contains(next) {
+                    let mut new_small = small_visited.clone();
+
+                    if next.to_ascii_lowercase() == *next {
+                        new_small.insert(next.to_string());
+                    }
+                    moves.push_back((next.to_string(), new_small, twice_visited.clone()));
+                } else if small_visited.contains(next)
+                    && twice_visited.is_empty()
+                    && next != "start"
+                    && next != "end"
+                {
+                    let mut twice = twice_visited.clone();
+                    twice.insert(next.to_string());
+                    moves.push_back((next.to_string(), small_visited.clone(), twice));
+                }
+            }
+        }
+    }
+    result
+}
+
 fn main() {
     let res1 = part_1(INPUT_FILE.to_string());
     println!("part1: {:?}", res1);
+
+    let res2 = part_2(INPUT_FILE.to_string());
+    println!("part2: {:?}", res2);
 }
 
 #[cfg(test)]
@@ -84,7 +126,7 @@ mod test {
     }
 
     #[test]
-    fn test_solves_part_1_example() {
+    fn test_solves_part_1_example_2() {
         assert_eq!(
             part_1(
                 "dc-end\n\
@@ -106,5 +148,27 @@ mod test {
     #[test]
     fn test_solves_part_1_input() {
         assert_eq!(part_1(INPUT_FILE.to_string()), 4413);
+    }
+
+    #[test]
+    fn test_solves_part_2_example_1() {
+        assert_eq!(
+            part_2(
+                "start-A\n\
+                 start-b\n\
+                 A-c\n\
+                 A-b\n\
+                 b-d\n\
+                 A-end\n\
+                 b-end"
+                    .to_string()
+            ),
+            36
+        )
+    }
+
+    #[test]
+    fn test_solves_part_2_input() {
+        assert_eq!(part_2(INPUT_FILE.to_string()), 118803);
     }
 }
