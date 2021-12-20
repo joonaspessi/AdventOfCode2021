@@ -1,11 +1,17 @@
 use std::collections::{HashMap, HashSet};
 
+#[derive(Debug, Clone, Copy)]
+enum Fold {
+    Y(i64),
+    X(i64),
+}
+
 const INPUT_FILE: &str = include_str!("../../inputs/day13.txt");
 
-fn parse(input: String) -> HashSet<(i64, i64)> {
+fn parse(input: String) -> (HashSet<(i64, i64)>, Vec<Fold>) {
     let mut parts: Vec<&str> = input.trim().split("\n\n").collect();
 
-    let folds = parts.pop().unwrap();
+    let folds_raw = parts.pop().unwrap();
     let dots_raw = parts.pop().unwrap();
 
     let dots_parsed: Vec<Vec<i64>> = dots_raw
@@ -20,14 +26,73 @@ fn parse(input: String) -> HashSet<(i64, i64)> {
         dots.insert((dot[0], dot[1]));
     }
 
-    println!("{:?}", dots);
+    let folds: Vec<Fold> = folds_raw
+        .trim()
+        .lines()
+        .map(|s| s.split("fold along ").nth(1).unwrap().split("=").collect())
+        .map(|c: Vec<&str>| {
+            let axis: i64 = c[1].parse().unwrap();
+            if c[0] == "y" {
+                Fold::Y(axis)
+            } else {
+                Fold::X(axis)
+            }
+        })
+        .collect();
 
-    dots
+    (dots, folds)
 }
 
-fn part_1(input: String) -> usize {
-    let dots = parse(input);
-    1
+fn mirror_x(dots: HashSet<(i64, i64)>, axis: i64) -> HashSet<(i64, i64)> {
+    let mut result: HashSet<(i64, i64)> = HashSet::new();
+    for dot in dots {
+        assert_ne!(dot.0, axis);
+        if dot.0 < axis {
+            result.insert(dot);
+        } else {
+            result.insert((axis - (dot.0 - axis), dot.1));
+        }
+    }
+    result
+}
+
+fn mirror_y(dots: HashSet<(i64, i64)>, axis: i64) -> HashSet<(i64, i64)> {
+    let mut result: HashSet<(i64, i64)> = HashSet::new();
+    for dot in dots {
+        assert_ne!(dot.1, axis);
+        if dot.1 < axis {
+            result.insert(dot);
+        } else {
+            result.insert((dot.0, axis - (dot.1 - axis)));
+        }
+    }
+    result
+}
+fn part_1(input: String) -> i64 {
+    let (dots, folds) = parse(input);
+    println!("{:?}", dots);
+    let mut x = dots.iter().max_by(|a, b| a.0.cmp(&b.0)).unwrap().0;
+    let mut y = dots.iter().max_by(|a, b| a.1.cmp(&b.1)).unwrap().1;
+    let mut result = dots.clone();
+
+    for fold in folds {
+        match fold {
+            Fold::Y(value) => {
+                println!("mirroring y {}", value);
+                result = mirror_y(result, value);
+                y = value;
+            }
+            Fold::X(value) => {
+                println!("mirroing x {}", value);
+                result = mirror_x(result, value);
+                x = value;
+            }
+        }
+
+        println!("{:?} {:?}", x, y);
+    }
+
+    result.len() as i64
 }
 
 fn main() {
@@ -66,7 +131,12 @@ fold along y=7
 fold along x=5"
                     .to_string()
             ),
-            0
+            17
         );
+    }
+
+    #[test]
+    fn test_solves_part_1_input() {
+        assert_eq!(part_1(INPUT_FILE.to_string()), 0);
     }
 }
