@@ -1,9 +1,9 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet;
 
-#[derive(Debug,Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
 enum Fold {
     Y(i64),
-    X(i64)
+    X(i64),
 }
 
 const INPUT_FILE: &str = include_str!("../../inputs/day13.txt");
@@ -26,81 +26,53 @@ fn parse(input: String) -> (HashSet<(i64, i64)>, Vec<Fold>) {
         dots.insert((dot[0], dot[1]));
     }
 
-
-    let folds : Vec<Fold> = folds_raw.trim().lines().map(|s| s.split("fold along ").nth(1).unwrap().split("=").collect()).map(|c : Vec<&str>|{
-        let axis: i64 = c[1].parse().unwrap();
-        if c[0] == "y" {
-            Fold::Y(axis)
-        } else {
-            Fold::X(axis)
-        }
-
-    }).collect();
+    let folds: Vec<Fold> = folds_raw
+        .trim()
+        .lines()
+        .map(|s| s.split("fold along ").nth(1).unwrap().split('=').collect())
+        .map(|c: Vec<&str>| {
+            let axis: i64 = c[1].parse().unwrap();
+            if c[0] == "y" {
+                Fold::Y(axis)
+            } else {
+                Fold::X(axis)
+            }
+        })
+        .collect();
 
     (dots, folds)
 }
 
-fn mirror_x(dots : HashSet<(i64, i64)>, axis : i64) -> HashSet<(i64,i64)>{
-    let mut result : HashSet<(i64, i64)> = HashSet::new();
+fn mirror_x(dots: HashSet<(i64, i64)>, axis: i64) -> HashSet<(i64, i64)> {
+    let mut result: HashSet<(i64, i64)> = HashSet::new();
     for dot in dots {
         assert_ne!(dot.0, axis);
         if dot.0 < axis {
             result.insert(dot);
         } else {
-            result.insert((axis-(dot.0-axis),dot.1));
+            result.insert((axis - (dot.0 - axis), dot.1));
         }
     }
     result
-
 }
 
-fn mirror_y(dots : HashSet<(i64, i64)>, axis : i64) -> HashSet<(i64,i64)>{
-    let mut result : HashSet<(i64, i64)> = HashSet::new();
+fn mirror_y(dots: HashSet<(i64, i64)>, axis: i64) -> HashSet<(i64, i64)> {
+    let mut result: HashSet<(i64, i64)> = HashSet::new();
     for dot in dots {
         assert_ne!(dot.1, axis);
         if dot.1 < axis {
             result.insert(dot);
         } else {
-            result.insert((dot.0,axis-(dot.1-axis)));
+            result.insert((dot.0, axis - (dot.1 - axis)));
         }
     }
     result
-
 }
-fn part_1(input: String) -> i64 {
-    let (dots, folds) = parse(input);
-    println!("{:?}",dots);
-    let mut x = dots.iter().max_by(|a,b| a.0.cmp(&b.0)).unwrap().0;
-    let mut y = dots.iter().max_by(|a,b| a.1.cmp(&b.1)).unwrap().1;
-    let mut result = dots.clone();
 
-
-    for fold in folds {
-        match fold {
-            Fold::Y(value) => {
-                println!("mirroring y {}", value);
-                result = mirror_y(result, value);
-                y = value;
-            },
-            Fold::X(value) => {
-                println!("mirroing x {}", value);
-                result = mirror_x(result, value);
-                x = value;
-            }
-
-        }
-        
-
-        println!("{:?} {:?}", x, y);
-
-
-    }
-
-    for yy in 0..y {
-
-        for xx in 0..x {
-        
-            if result.contains(&(xx,yy)) {
+fn print_fold(dots: HashSet<(i64, i64)>, x_size: i64, y_size: i64) {
+    for yy in 0..y_size {
+        for xx in 0..x_size {
+            if dots.contains(&(xx, yy)) {
                 print!("#")
             } else {
                 print!(".")
@@ -108,11 +80,35 @@ fn part_1(input: String) -> i64 {
         }
         println!()
     }
+}
+fn solver(input: String, part_1: bool) -> i64 {
+    let (mut result, folds) = parse(input);
+    let mut x_size = result.iter().max_by(|a, b| a.0.cmp(&b.0)).unwrap().0;
+    let mut y_size = result.iter().max_by(|a, b| a.1.cmp(&b.1)).unwrap().1;
+
+    for fold in folds {
+        match fold {
+            Fold::Y(value) => {
+                result = mirror_y(result, value);
+                y_size = value;
+            }
+            Fold::X(value) => {
+                result = mirror_x(result, value);
+                x_size = value;
+            }
+        }
+
+        if part_1 {
+            break;
+        }
+    }
+
+    print_fold(result.clone(), x_size, y_size);
     result.len() as i64
 }
 
 fn main() {
-    let res1 = part_1(INPUT_FILE.to_string());
+    let res1 = solver(INPUT_FILE.to_string(), true);
     println!("part1: {:?}", res1);
 }
 
@@ -123,7 +119,7 @@ mod test {
     #[test]
     fn test_solves_part_1_example() {
         assert_eq!(
-            part_1(
+            solver(
                 "6,10
 0,14
 9,10
@@ -145,7 +141,8 @@ mod test {
 
 fold along y=7
 fold along x=5"
-                    .to_string()
+                    .to_string(),
+                true
             ),
             17
         );
@@ -153,6 +150,42 @@ fold along x=5"
 
     #[test]
     fn test_solves_part_1_input() {
-        assert_eq!(part_1(INPUT_FILE.to_string()), 0);
+        assert_eq!(solver(INPUT_FILE.to_string(), true), 675);
+    }
+    #[test]
+    fn test_solves_part_2_example() {
+        assert_eq!(
+            solver(
+                "6,10
+0,14
+9,10
+0,3
+10,4
+4,11
+6,0
+6,12
+4,1
+0,13
+10,12
+3,4
+3,0
+8,4
+1,10
+2,14
+8,10
+9,0
+
+fold along y=7
+fold along x=5"
+                    .to_string(),
+                false
+            ),
+            16
+        );
+    }
+
+    #[test]
+    fn test_solves_part_2_input() {
+        assert_eq!(solver(INPUT_FILE.to_string(), false), 98);
     }
 }
