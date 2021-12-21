@@ -29,7 +29,7 @@ $ npm i -g nodemon #if not installed, install nodemon with npm
 $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 ```
 
-## Status (⭐ 24/50)
+## Status (⭐ 26/50)
 
 ### Day 1 ⭐⭐
 
@@ -114,3 +114,9 @@ $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 - Without any knowledge how to solve this kind of problem, it first felt quite hard.
 - Had to Check (cheat) how to solve this kind of problems. There was quite elegant solution to push the paths to a deque and count all the paths that leads to the end.
 - Part two was quite simple after understanding the problem correctly. So right after the first small cave is explored twice, no other cave could not be explored two times.
+
+### Day13 ⭐⭐
+
+- Simple mirroring algorithm
+- Didn't read instructions properly, first part only required one fold.
+- Stored coordinate points to hashset. Printing and determining size was more complex but again this solution worked quite elegantly.
