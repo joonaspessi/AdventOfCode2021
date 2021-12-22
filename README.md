@@ -29,7 +29,7 @@ $ npm i -g nodemon #if not installed, install nodemon with npm
 $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 ```
 
-## Status (⭐ 26/50)
+## Status (⭐ 28/50)
 
 ### Day 1 ⭐⭐
 
@@ -120,3 +120,10 @@ $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 - Simple mirroring algorithm
 - Didn't read instructions properly, first part only required one fold.
 - Stored coordinate points to hashset. Printing and determining size was more complex but again this solution worked quite elegantly.
+
+### Day14 ⭐⭐
+
+- Part01 implementation with naive algorithm that calculated the actual string
+- Calculating the actual string was too slow for part02 and its 40 iterations
+- Instead of calculating the increasing string, it is more efficient to calculate count of pairs. Pair will always produce two new pairs for next iteration.
+- Finally calculating the letter count by calculating first letter of pair. This count will dismiss the first letter count in the polymer sequence.
