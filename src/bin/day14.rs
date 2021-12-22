@@ -1,7 +1,5 @@
 use std::collections::HashMap;
 
-use itertools::Itertools;
-
 const INPUT_FILE: &str = include_str!("../../inputs/day14.txt");
 
 fn parse(input: String) -> (HashMap<(char, char), char>, Vec<char>) {
@@ -27,17 +25,27 @@ fn parse(input: String) -> (HashMap<(char, char), char>, Vec<char>) {
     }
 
     let polymer_template: Vec<char> = temp.pop().unwrap().chars().collect();
-
     (result, polymer_template)
+}
+
+fn calculate_most_and_least_common_polymers(polymers: Vec<char>) -> (i64, i64) {
+    let mut counts = HashMap::new();
+    for polymer in polymers.iter() {
+        *counts.entry(polymer).or_insert(0) += 1;
+    }
+
+    let max = counts.iter().max_by(|a, b| a.1.cmp(&b.1)).unwrap();
+    let min = counts.iter().min_by(|a, b| a.1.cmp(&b.1)).unwrap();
+
+    (*min.1, *max.1)
 }
 
 fn part_1(input: String) -> i64 {
     let (insertion_rules, polymer_template) = parse(input);
 
-    println!("{:?}", insertion_rules);
-    let mut result = polymer_template.clone();
+    let mut result = polymer_template;
 
-    for _ in 0..4 {
+    for _ in 0..10 {
         let mut temp = vec![];
         for (i, pair) in result.windows(2).enumerate() {
             let prev = pair[0];
@@ -55,8 +63,8 @@ fn part_1(input: String) -> i64 {
         result = temp;
     }
 
-    println!("{:?}", result);
-    0
+    let (min, max) = calculate_most_and_least_common_polymers(result);
+    max - min
 }
 
 fn main() {
@@ -94,5 +102,10 @@ CN -> C"
             ),
             1588
         );
+    }
+
+    #[test]
+    fn solves_part_1_input() {
+        assert_eq!(part_1(INPUT_FILE.to_string()), 2967);
     }
 }
