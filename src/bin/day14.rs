@@ -40,12 +40,18 @@ fn calculate_most_and_least_common_polymers(polymers: Vec<char>) -> (i64, i64) {
     (*min.1, *max.1)
 }
 
-fn part_1(input: String) -> i64 {
+fn solver(input: String, part_2: bool) -> i64 {
     let (insertion_rules, polymer_template) = parse(input);
 
     let mut result = polymer_template;
 
-    for _ in 0..10 {
+    let mut iterations = 10;
+
+    if part_2 {
+        iterations = 40;
+    }
+
+    for i in 0..iterations {
         let mut temp = vec![];
         for (i, pair) in result.windows(2).enumerate() {
             let prev = pair[0];
@@ -60,6 +66,8 @@ fn part_1(input: String) -> i64 {
             temp.push(next);
         }
 
+        println!("{:?}", i);
+
         result = temp;
     }
 
@@ -68,8 +76,10 @@ fn part_1(input: String) -> i64 {
 }
 
 fn main() {
-    let res1 = part_1(INPUT_FILE.to_string());
+    let res1 = solver(INPUT_FILE.to_string(), false);
     println!("part1: {}", res1);
+    let res2 = solver(INPUT_FILE.to_string(), true);
+    println!("part2: {}", res2);
 }
 
 #[cfg(test)]
@@ -79,7 +89,7 @@ mod test {
     #[test]
     fn solves_part_1_example() {
         assert_eq!(
-            part_1(
+            solver(
                 "NNCB
 
 CH -> B
@@ -98,7 +108,8 @@ BB -> N
 BC -> B
 CC -> N
 CN -> C"
-                    .to_string()
+                    .to_string(),
+                false
             ),
             1588
         );
@@ -106,6 +117,35 @@ CN -> C"
 
     #[test]
     fn solves_part_1_input() {
-        assert_eq!(part_1(INPUT_FILE.to_string()), 2967);
+        assert_eq!(solver(INPUT_FILE.to_string(), false), 2967);
+    }
+
+    #[test]
+    fn solves_part_2_example() {
+        assert_eq!(
+            solver(
+                "NNCB
+
+CH -> B
+HH -> N
+CB -> H
+NH -> C
+HB -> C
+HC -> B
+HN -> C
+NN -> C
+BH -> H
+NC -> B
+NB -> B
+BN -> B
+BB -> N
+BC -> B
+CC -> N
+CN -> C"
+                    .to_string(),
+                true
+            ),
+            1588
+        );
     }
 }
