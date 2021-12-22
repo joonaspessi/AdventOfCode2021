@@ -28,14 +28,9 @@ fn parse(input: String) -> (HashMap<(char, char), char>, Vec<char>) {
     (result, polymer_template)
 }
 
-fn calculate_most_and_least_common_polymers(polymers: Vec<char>) -> (i64, i64) {
-    let mut counts = HashMap::new();
-    for polymer in polymers.iter() {
-        *counts.entry(polymer).or_insert(0) += 1;
-    }
-
-    let max = counts.iter().max_by(|a, b| a.1.cmp(&b.1)).unwrap();
-    let min = counts.iter().min_by(|a, b| a.1.cmp(&b.1)).unwrap();
+fn calculate_most_and_least_common_polymers(counts: HashMap<char, i64>) -> (i64, i64) {
+    let max = counts.iter().max_by(|a, b| a.1.cmp(b.1)).unwrap();
+    let min = counts.iter().min_by(|a, b| a.1.cmp(b.1)).unwrap();
 
     (*min.1, *max.1)
 }
@@ -43,35 +38,42 @@ fn calculate_most_and_least_common_polymers(polymers: Vec<char>) -> (i64, i64) {
 fn solver(input: String, part_2: bool) -> i64 {
     let (insertion_rules, polymer_template) = parse(input);
 
-    let mut result = polymer_template;
-
     let mut iterations = 10;
 
     if part_2 {
         iterations = 40;
     }
 
-    for i in 0..iterations {
-        let mut temp = vec![];
-        for (i, pair) in result.windows(2).enumerate() {
-            let prev = pair[0];
-            let next = pair[1];
+    let mut counts: HashMap<(char, char), i64> = HashMap::new();
 
-            let insert = insertion_rules.get(&(prev, next)).unwrap();
-
-            if i == 0 {
-                temp.push(prev);
-            }
-            temp.push(*insert);
-            temp.push(next);
-        }
-
-        println!("{:?}", i);
-
-        result = temp;
+    for pair in polymer_template.windows(2) {
+        *counts.entry((pair[0], pair[1])).or_insert(0) += 1;
     }
 
-    let (min, max) = calculate_most_and_least_common_polymers(result);
+    for _ in 0..iterations {
+        let mut temp = HashMap::new();
+        for ((a, b), _) in counts.clone().into_iter() {
+            *temp
+                .entry((a, *insertion_rules.get(&(a, b)).unwrap()))
+                .or_insert(0) += counts.get(&(a, b)).unwrap();
+            *temp
+                .entry((*insertion_rules.get(&(a, b)).unwrap(), b))
+                .or_insert(0) += counts.get(&(a, b)).unwrap();
+        }
+        counts = temp;
+    }
+
+    let mut result = HashMap::new();
+
+    for ((a, _), value) in counts {
+        *result.entry(a).or_insert(0) += value;
+    }
+
+    *result.entry(*polymer_template.last().unwrap()).or_insert(0) += 1;
+
+    let (min, max) = calculate_most_and_least_common_polymers(result.clone());
+
+    println!("{:?}", result);
     max - min
 }
 
@@ -145,7 +147,12 @@ CN -> C"
                     .to_string(),
                 true
             ),
-            1588
+            2188189693529
         );
+    }
+
+    #[test]
+    fn solves_part_2_input() {
+        assert_eq!(solver(INPUT_FILE.to_string(), true), 3692219987038);
     }
 }
