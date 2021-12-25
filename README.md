@@ -132,3 +132,4 @@ $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 
 - Implemented Dijkstra, which ended up to be very slow. However, solution was correct.
 - Should use more performant version. For example Dijkstra with priority queue.
+- Refactored the matrix format greedy Dijkstra with adjacency list heap Dijkstra. Now the implementation is fast.
