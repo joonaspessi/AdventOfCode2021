@@ -28,7 +28,7 @@ struct Edge {
     cost: usize,
 }
 
-fn dijkstra_adj_list_heap(adj_list: &Vec<Vec<Edge>>, start: usize, goal: usize) -> Option<usize> {
+fn dijkstra_adj_list_heap(adj_list: &[Vec<Edge>], start: usize, goal: usize) -> Option<usize> {
     let mut dist: Vec<_> = (0..adj_list.len()).map(|_| usize::MAX).collect();
 
     let mut heap = BinaryHeap::new();
@@ -64,7 +64,7 @@ fn dijkstra_adj_list_heap(adj_list: &Vec<Vec<Edge>>, start: usize, goal: usize) 
     None
 }
 
-fn parse(input: String, part2: bool) -> Vec<Vec<u32>> {
+fn parse(input: String, part2: bool) -> Vec<Vec<Edge>> {
     let mut parsed: Vec<Vec<u32>> = input
         .lines()
         .map(|line| line.chars().map(|c| c.to_digit(10).unwrap()).collect())
@@ -80,32 +80,42 @@ fn parse(input: String, part2: bool) -> Vec<Vec<u32>> {
 
     let vertex_count = size_y * size_x;
 
-    let mut vertex_map = Vec::new();
+    let mut adj_list = Vec::new();
     for v in 0..vertex_count {
-        let mut vertex = vec![0; vertex_count];
+        let mut edges = vec![];
         let (x, y) = flat_to_xy(v, size_y);
         // Top
         if y > 0 {
-            vertex[xy_to_flat(x, y - 1, size_y)] = parsed[y - 1][x];
+            edges.push(Edge {
+                node: xy_to_flat(x, y - 1, size_y),
+                cost: parsed[y - 1][x] as usize,
+            });
         }
         // Right
         if x + 1 < size_x {
-            vertex[xy_to_flat(x + 1, y, size_y)] = parsed[y][x + 1];
+            edges.push(Edge {
+                node: xy_to_flat(x + 1, y, size_y),
+                cost: parsed[y][x + 1] as usize,
+            });
         }
         // Down
         if y + 1 < size_y {
-            vertex[xy_to_flat(x, y + 1, size_y)] = parsed[y + 1][x];
+            edges.push(Edge {
+                node: xy_to_flat(x, y + 1, size_y),
+                cost: parsed[y + 1][x] as usize,
+            });
         }
         // Left
         if x > 0 {
-            vertex[xy_to_flat(x - 1, y, size_y)] = parsed[y][x - 1];
+            edges.push(Edge {
+                node: xy_to_flat(x - 1, y, size_y),
+                cost: parsed[y][x - 1] as usize,
+            });
         }
-
-        vertex_map.push(vertex);
+        adj_list.push(edges);
     }
 
-    println!("size: x={} y={}", size_x, size_x);
-    vertex_map
+    adj_list
 }
 
 fn extend_map_for_part2(input_map: Vec<Vec<u32>>) -> Vec<Vec<u32>> {
@@ -154,54 +164,14 @@ fn flat_to_xy(i: usize, size: usize) -> (usize, usize) {
     (x, y)
 }
 
-fn min_distance(dist: &[u32], spt_set: &[bool], vertex_count: usize) -> usize {
-    let mut min = u32::MAX;
-    let mut min_index = 0;
-    for vertex in 0..vertex_count {
-        if !spt_set[vertex] && dist[vertex] <= min {
-            min = dist[vertex];
-            min_index = vertex;
-        }
-    }
-    min_index
+fn part_1(input: String) -> usize {
+    let adj_list = parse(input, false);
+    dijkstra_adj_list_heap(&adj_list, 0, adj_list.len() - 1).unwrap()
 }
 
-fn dijkstra(graph: Vec<Vec<u32>>, start: usize) -> Vec<u32> {
-    let vertex_count = graph.len();
-    let mut dist = vec![u32::MAX; vertex_count];
-    let mut spt_set = vec![false; vertex_count];
-
-    dist[start] = 0;
-
-    for c in 0..(vertex_count - 1) {
-        let u = min_distance(&dist, &spt_set, vertex_count);
-        spt_set[u] = true;
-
-        for v in 0..vertex_count {
-            if !spt_set[v]
-                && graph[u][v] > 0
-                && dist[u] != u32::MAX
-                && dist[u] + graph[u][v] < dist[v]
-            {
-                dist[v] = dist[u] + graph[u][v];
-            }
-        }
-        println!("{:?} {:?}", c, vertex_count);
-    }
-    dist
-}
-
-fn part_1(input: String) -> u32 {
-    let graph = parse(input, false);
-    let mut dist = dijkstra(graph, 0);
-    dist.pop().unwrap()
-}
-
-fn part_2(input: String) -> u32 {
-    let graph = parse(input, true);
-    println!("djisktra");
-    let mut dist = dijkstra(graph, 0);
-    dist.pop().unwrap()
+fn part_2(input: String) -> usize {
+    let adj_list = parse(input, true);
+    dijkstra_adj_list_heap(&adj_list, 0, adj_list.len() - 1).unwrap()
 }
 
 fn main() {
@@ -235,7 +205,6 @@ mod test {
             40
         );
     }
-    #[ignore = "too slow"]
     #[test]
     fn test_solves_part1_input() {
         assert_eq!(part_1(INPUT_FILE.to_string()), 685);
@@ -261,9 +230,8 @@ mod test {
         );
     }
 
-    #[ignore = "too slow"]
     #[test]
     fn test_solves_part2_input() {
-        assert_eq!(part_2(INPUT_FILE.to_string()), 685);
+        assert_eq!(part_2(INPUT_FILE.to_string()), 2995);
     }
 }
