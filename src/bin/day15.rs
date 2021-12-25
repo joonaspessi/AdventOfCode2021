@@ -1,11 +1,14 @@
 const INPUT_FILE: &str = include_str!("../../inputs/day15.txt");
 
-fn parse(input: String) -> (Vec<Vec<u32>>, usize) {
-    let parsed: Vec<Vec<u32>> = input
+fn parse(input: String, part2: bool) -> Vec<Vec<u32>> {
+    let mut parsed: Vec<Vec<u32>> = input
         .lines()
         .map(|line| line.chars().map(|c| c.to_digit(10).unwrap()).collect())
         .collect();
 
+    if part2 {
+        parsed = extend_map_for_part2(parsed);
+    }
     let size_y: usize = parsed.len();
     let size_x = parsed[0].len();
 
@@ -36,7 +39,45 @@ fn parse(input: String) -> (Vec<Vec<u32>>, usize) {
 
         vertex_map.push(vertex);
     }
-    (vertex_map, vertex_count)
+
+    println!("size: x={} y={}", size_x, size_x);
+    vertex_map
+}
+
+fn extend_map_for_part2(input_map: Vec<Vec<u32>>) -> Vec<Vec<u32>> {
+    let mut result = input_map.clone();
+    let mut last = input_map;
+    // append y
+    for _i in 1..5 {
+        last = last
+            .iter()
+            .map(|line| {
+                line.iter()
+                    .map(|risk_level| std::cmp::max((risk_level + 1) % 10, 1))
+                    .collect()
+            })
+            .collect();
+        result.append(&mut last.clone())
+    }
+
+    // append x
+    result = result
+        .into_iter()
+        .map(|line| {
+            let mut l = line.clone();
+            let mut last = line;
+            for _ in 1..5 {
+                last = last
+                    .iter()
+                    .map(|risk_level| std::cmp::max((risk_level + 1) % 10, 1))
+                    .collect();
+                l.append(&mut last.clone())
+            }
+            l
+        })
+        .collect();
+
+    result
 }
 
 fn xy_to_flat(x: usize, y: usize, size: usize) -> usize {
@@ -61,17 +102,15 @@ fn min_distance(dist: &[u32], spt_set: &[bool], vertex_count: usize) -> usize {
     min_index
 }
 
-fn part_1(input: String) -> u32 {
-    let (graph, vertex_count) = parse(input);
-
+fn djikstra(graph: Vec<Vec<u32>>, start: usize) -> Vec<u32> {
+    let vertex_count = graph.len();
     let mut dist = vec![u32::MAX; vertex_count];
     let mut spt_set = vec![false; vertex_count];
 
-    dist[0] = 0;
+    dist[start] = 0;
 
-    for _ in 0..(vertex_count - 1) {
+    for c in 0..(vertex_count - 1) {
         let u = min_distance(&dist, &spt_set, vertex_count);
-        println!("{}", u);
         spt_set[u] = true;
 
         for v in 0..vertex_count {
@@ -83,14 +122,31 @@ fn part_1(input: String) -> u32 {
                 dist[v] = dist[u] + graph[u][v];
             }
         }
+        println!("{:?} {:?}", c, vertex_count);
     }
-    println!("{:?}", dist);
+    //print_djikstra(dist.clone());
+    dist
+}
+
+fn part_1(input: String) -> u32 {
+    let graph = parse(input, false);
+    let mut dist = djikstra(graph, 0);
+    dist.pop().unwrap()
+}
+
+fn part_2(input: String) -> u32 {
+    let graph = parse(input, true);
+    println!("djisktra");
+    let mut dist = djikstra(graph, 0);
     dist.pop().unwrap()
 }
 
 fn main() {
     let res1 = part_1(INPUT_FILE.to_string());
     println!("part1 {:?}", res1);
+
+    let res2 = part_2(INPUT_FILE.to_string());
+    println!("part2 {:?}", res2);
 }
 
 #[cfg(test)]
@@ -116,9 +172,35 @@ mod test {
             40
         );
     }
-
+    #[ignore = "too slow"]
     #[test]
     fn test_solves_part1_input() {
         assert_eq!(part_1(INPUT_FILE.to_string()), 685);
+    }
+
+    #[test]
+    fn test_solves_part2_example() {
+        assert_eq!(
+            part_2(
+                "1163751742
+1381373672
+2136511328
+3694931569
+7463417111
+1319128137
+1359912421
+3125421639
+1293138521
+2311944581"
+                    .to_string()
+            ),
+            315
+        );
+    }
+
+    #[ignore = "too slow"]
+    #[test]
+    fn test_solves_part2_input() {
+        assert_eq!(part_2(INPUT_FILE.to_string()), 685);
     }
 }
