@@ -29,7 +29,7 @@ $ npm i -g nodemon #if not installed, install nodemon with npm
 $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 ```
 
-## Status (⭐ 28/50)
+## Status (⭐ 30/50)
 
 ### Day 1 ⭐⭐
 
@@ -127,3 +127,8 @@ $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 - Calculating the actual string was too slow for part02 and its 40 iterations
 - Instead of calculating the increasing string, it is more efficient to calculate count of pairs. Pair will always produce two new pairs for next iteration.
 - Finally calculating the letter count by calculating first letter of pair. This count will dismiss the first letter count in the polymer sequence.
+
+### Day15 ⭐⭐
+
+- Implemented Djikstra, which ended up to be very slow. However, solution was correct.
+- Should use more performant version. For example Djikstra with priority queue.
