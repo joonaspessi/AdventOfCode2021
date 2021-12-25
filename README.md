@@ -130,5 +130,5 @@ $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 
 ### Day15 ⭐⭐
 
-- Implemented Djikstra, which ended up to be very slow. However, solution was correct.
-- Should use more performant version. For example Djikstra with priority queue.
+- Implemented Dijkstra, which ended up to be very slow. However, solution was correct.
+- Should use more performant version. For example Dijkstra with priority queue.

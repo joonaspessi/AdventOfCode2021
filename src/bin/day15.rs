@@ -102,7 +102,7 @@ fn min_distance(dist: &[u32], spt_set: &[bool], vertex_count: usize) -> usize {
     min_index
 }
 
-fn djikstra(graph: Vec<Vec<u32>>, start: usize) -> Vec<u32> {
+fn dijkstra(graph: Vec<Vec<u32>>, start: usize) -> Vec<u32> {
     let vertex_count = graph.len();
     let mut dist = vec![u32::MAX; vertex_count];
     let mut spt_set = vec![false; vertex_count];
@@ -124,20 +124,19 @@ fn djikstra(graph: Vec<Vec<u32>>, start: usize) -> Vec<u32> {
         }
         println!("{:?} {:?}", c, vertex_count);
     }
-    //print_djikstra(dist.clone());
     dist
 }
 
 fn part_1(input: String) -> u32 {
     let graph = parse(input, false);
-    let mut dist = djikstra(graph, 0);
+    let mut dist = dijkstra(graph, 0);
     dist.pop().unwrap()
 }
 
 fn part_2(input: String) -> u32 {
     let graph = parse(input, true);
     println!("djisktra");
-    let mut dist = djikstra(graph, 0);
+    let mut dist = dijkstra(graph, 0);
     dist.pop().unwrap()
 }
 
