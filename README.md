@@ -29,7 +29,7 @@ $ npm i -g nodemon #if not installed, install nodemon with npm
 $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 ```
 
-## Status (⭐ 30/50)
+## Status (⭐ 32/50)
 
 ### Day 1 ⭐⭐
 
@@ -133,3 +133,9 @@ $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 - Implemented Dijkstra, which ended up to be very slow. However, solution was correct.
 - Should use more performant version. For example Dijkstra with priority queue.
 - Refactored the matrix format greedy Dijkstra with adjacency list heap Dijkstra. Now the implementation is fast.
+
+### Day16 ⭐⭐
+
+- It was quite a struggle to first understand the problem itself from the description
+- Learned a lot: passing parameters as a reference, using enumerations and implementing mutable methods for enumerations
+- Had to "cheat" and watch a reference implementation https://www.youtube.com/watch?v=brkGA89wZOs&t=2137s
