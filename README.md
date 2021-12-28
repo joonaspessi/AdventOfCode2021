@@ -29,7 +29,7 @@ $ npm i -g nodemon #if not installed, install nodemon with npm
 $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 ```
 
-## Status (⭐ 32/50)
+## Status (⭐ 34/50)
 
 ### Day 1 ⭐⭐
 
@@ -139,3 +139,9 @@ $ nodemon --watch src -e rs --exec "cargo test --bin dayXX"
 - It was quite a struggle to first understand the problem itself from the description
 - Learned a lot: passing parameters as a reference, using enumerations and implementing mutable methods for enumerations
 - Had to "cheat" and watch a reference implementation https://www.youtube.com/watch?v=brkGA89wZOs&t=2137s
+
+### Day17 ⭐⭐
+
+- After figuring out range min and max range for x, the solution was quite easy to form.
+- X value could be determined with use of sum first n natural numbers equation `min_x = n * (n + 1) / 2` and solving n from this equation.
+- Probably there is more elegant way to determine scale for y as well.
