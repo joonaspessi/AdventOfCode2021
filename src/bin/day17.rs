@@ -35,7 +35,9 @@ fn is_target_hit(xv: i64, yv: i64, min_x: i64, max_x: i64, min_y: i64, max_y: i6
             return None;
         }
 
-        x_vel = std::cmp::max(x_vel - 1, 0);
+        if x_vel > 0 {
+            x_vel -= 1;
+        }
         y_vel -= 1;
     }
 }
@@ -72,9 +74,41 @@ fn part_1(input: String) -> i64 {
     max_y_trajectory_height
 }
 
+fn part_2(input: String) -> i64 {
+    let (min_x, max_x, min_y, max_y) = parse(input);
+
+    // Determine minimum x velocity
+    // Use sum-first-n-natural-numbers equation
+    // min_x = n * (n + 1) / 2
+    // Solve n aka velocity from the equation
+    // n^2 + n - 2min_x = 0
+    // n = (-1 +- sqrt(1 - 4 * 1 * -2min_x) ) / 2
+    // n = (-1 +- sqrt(1 + 8min_x)) / 2
+    let velocity_x_min = ((-1f64 + (1f64 + 8f64 * min_x as f64).sqrt()) / 2f64).ceil() as i64;
+    let velocity_x_max = max_x;
+
+    // Just too tired right now, Probably under this range.
+    let velocity_y_min = 2 * min_y;
+    let velocity_y_max = -2 * min_y;
+
+    let mut hit_count = 0;
+
+    for xv in velocity_x_min..=velocity_x_max {
+        for yv in velocity_y_min..=velocity_y_max {
+            if let Some(_y_hit) = is_target_hit(xv, yv, min_x, max_x, min_y, max_y) {
+                hit_count += 1;
+            }
+        }
+    }
+    hit_count
+}
+
 fn main() {
     let res1 = part_1(INPUT_FILE.to_string());
     println!("part1: {}", res1);
+
+    let res2 = part_2(INPUT_FILE.to_string());
+    println!("part2: {}", res2);
 }
 
 #[cfg(test)]
@@ -89,5 +123,15 @@ mod test {
     #[test]
     fn solves_part1_input() {
         assert_eq!(part_1(INPUT_FILE.to_string()), 4186);
+    }
+
+    #[test]
+    fn solves_part2_example() {
+        assert_eq!(part_2("target area: x=20..30, y=-10..-5 ".to_string()), 112);
+    }
+
+    #[test]
+    fn solves_part2_input() {
+        assert_eq!(part_2(INPUT_FILE.to_string()), 2709);
     }
 }
