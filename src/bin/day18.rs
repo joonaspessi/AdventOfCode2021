@@ -36,11 +36,17 @@ impl BTNode<i64> {
 
     pub fn find_exploding_parent(&mut self, depth: usize) -> Option<&mut BTNode<i64>> {
         if depth == 3 {
-            return Some(self);
+            if let Op::Pair = self.op {
+                return Some(self);
+            } else {
+                return None;
+            }
         }
 
         if let Some(left) = &mut self.left {
-            return left.find_exploding_parent(depth + 1);
+            if let Some(node) = left.find_exploding_parent(depth + 1) {
+                return Some(node);
+            };
         }
 
         if let Some(right) = &mut self.right {
@@ -89,11 +95,20 @@ impl BinaryTree<i64> {
 
             let mut new_left = id_node(0);
             let mut new_right = id_node(0);
+
             if let Op::Pair = descedant_left.op {
                 if let Op::Id(value) = descedant_left.right.as_ref().unwrap().op {
                     if let Op::Id(value2) = exploding_parent_node.right.as_ref().unwrap().op {
                         println!("value left{:?}", value);
                         new_right = id_node(value + value2);
+                    }
+                }
+            }
+
+            if let Op::Pair = descedant_right.op {
+                if let Op::Id(value) = descedant_right.left.as_ref().unwrap().op {
+                    if let Op::Id(value2) = exploding_parent_node.left.as_ref().unwrap().op {
+                        new_left = id_node(value + value2);
                     }
                 }
             }
@@ -164,12 +179,25 @@ mod test {
     }
 
     #[test]
-    fn explodes_example() {
+    fn explodes_example1() {
         let mut tree = BinaryTree::parse("[[[[[9,8],1],2],3],4]".to_string());
         tree.explode();
         assert_eq!(tree.unparse(), "[[[[0,9],2],3],4]");
     }
 
+    #[test]
+    fn explodes_example2() {
+        let mut tree = BinaryTree::parse("[7,[6,[5,[4,[3,2]]]]]".to_string());
+        tree.explode();
+        assert_eq!(tree.unparse(), "[7,[6,[5,[7,0]]]]");
+    }
+
+    #[test]
+    fn explodes_example3() {
+        let mut tree = BinaryTree::parse("[[6,[5,[4,[3,2]]]],1]".to_string());
+        tree.explode();
+        assert_eq!(tree.unparse(), "[[6,[5,[7,0]]],3]");
+    }
     #[test]
     fn solves_part1_example() {
         assert_eq!(part_1("[[1,2],[[3,4],5]]".to_string()), 143);
